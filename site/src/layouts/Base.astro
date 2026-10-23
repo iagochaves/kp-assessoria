@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#160038" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preload" href="/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: 'KP Assessoria',
+    url: Astro.site?.toString(),
+    description,
+    areaServed: 'BR',
+  })} />
+</head>
+<body>
+  <Fragment set:html={`<!--
+THESIS: A página é o diagnóstico. O primeiro viewport pergunta quantas motos a loja vende e responde com prova real de parceiros, recusando o hero clássico "foto do time + botão + popup".
+OWN-WORLD: Noite violeta KP (#160038/#1a0147), um único brilho #9d5cff onde há dinheiro ou escolha, Archivo variável (expandida nos números, normal na leitura), blocos de resposta 12px, Placas em papel claro como única pausa.
+STORY: O dono entende que a KP faz loja de moto vender mais, acredita porque vê lojas Shineray/multimarcas nomeadas com números, e responde 4 passos sem sair do topo.
+FIRST VIEWPORT: Logo + "+R$18 milhões por mês" no topo; H1 expandido; cartão do quiz com 4 blocos (1–5, 6–15, 16–30, 30+); a resposta revela a prova logo ao lado/abaixo.
+FORM: Diagnóstico ao vivo, candidato 3 de 7, seed f2832054.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->`} />
+  <a class="skip" href="#quiz">Pular para o diagnóstico</a>
+  <slot />
+</body>
+</html>

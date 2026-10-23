@@ -1,0 +1,610 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-14T20:24:22+00:00",
+  "title": "Design System: KP Assessoria",
+  "extensions": {
+    "colorMeta": {
+      "violet-night": {
+        "role": "neutral",
+        "displayName": "Noite Violeta",
+        "canonical": "oklch(17.9% 0.100 292.7)",
+        "tonalRamp": [
+          "#10002d",
+          "#28154f",
+          "#43336f",
+          "#605291",
+          "#7f71b3",
+          "#a093d7",
+          "#c6b9fb",
+          "#efecfe"
+        ]
+      },
+      "violet-ink": {
+        "role": "neutral",
+        "displayName": "Tinta Violeta",
+        "canonical": "oklch(20.6% 0.115 288.6)",
+        "tonalRamp": [
+          "#0e0030",
+          "#251257",
+          "#3f3178",
+          "#5c509a",
+          "#7b71bd",
+          "#9c92e2",
+          "#c1bbfb",
+          "#edecfe"
+        ]
+      },
+      "violet-deep": {
+        "role": "secondary",
+        "displayName": "Violeta Profundo",
+        "canonical": "oklch(37.7% 0.182 292.4)",
+        "tonalRamp": [
+          "#0f002e",
+          "#2b0260",
+          "#481895",
+          "#653fb9",
+          "#8361de",
+          "#a387fc",
+          "#c5b9fc",
+          "#eeecfe"
+        ]
+      },
+      "violet-royal": {
+        "role": "secondary",
+        "displayName": "Violeta Real",
+        "canonical": "oklch(39.3% 0.230 284.8)",
+        "tonalRamp": [
+          "#0c0032",
+          "#240068",
+          "#3f07a7",
+          "#5a33d6",
+          "#765afd",
+          "#968ff8",
+          "#bdbcfe",
+          "#ecedff"
+        ]
+      },
+      "violet-electric": {
+        "role": "secondary",
+        "displayName": "Violeta Elétrico",
+        "canonical": "oklch(45.7% 0.254 287.6)",
+        "tonalRamp": [
+          "#0d002f",
+          "#270068",
+          "#4400a7",
+          "#6220e0",
+          "#7d56fd",
+          "#9a8df8",
+          "#c0bbfe",
+          "#edecff"
+        ]
+      },
+      "violet-band": {
+        "role": "primary",
+        "displayName": "Violeta Faixa",
+        "canonical": "oklch(51.2% 0.250 292.3)",
+        "tonalRamp": [
+          "#0f002d",
+          "#2a035f",
+          "#490e9a",
+          "#6b1cda",
+          "#8753f7",
+          "#a388fb",
+          "#c5bafb",
+          "#eeecfe"
+        ]
+      },
+      "violet-core": {
+        "role": "primary",
+        "displayName": "Violeta Núcleo",
+        "canonical": "oklch(53.2% 0.260 292.6)",
+        "tonalRamp": [
+          "#10002e",
+          "#2b0062",
+          "#4a059e",
+          "#6c0fde",
+          "#8850fb",
+          "#a386fe",
+          "#c5b9fd",
+          "#eeecfe"
+        ]
+      },
+      "violet-glow": {
+        "role": "primary",
+        "displayName": "Violeta Brilho",
+        "canonical": "oklch(63.0% 0.231 297.7)",
+        "tonalRamp": [
+          "#12002c",
+          "#2f005d",
+          "#500696",
+          "#7224cb",
+          "#914ef1",
+          "#ad81fe",
+          "#cbb6fd",
+          "#f0ebfe"
+        ]
+      },
+      "lilac": {
+        "role": "tertiary",
+        "displayName": "Lilás",
+        "canonical": "oklch(81.4% 0.108 298.5)",
+        "tonalRamp": [
+          "#12002b",
+          "#2c1150",
+          "#483070",
+          "#664e92",
+          "#866eb5",
+          "#a78fd9",
+          "#ccb6fc",
+          "#f0ebfe"
+        ]
+      },
+      "text-soft": {
+        "role": "tertiary",
+        "displayName": "Lilás Suave",
+        "canonical": "oklch(87.2% 0.071 296.6)",
+        "tonalRamp": [
+          "#0f0225",
+          "#281b42",
+          "#443761",
+          "#615581",
+          "#8175a3",
+          "#a296c6",
+          "#c8bbed",
+          "#f0ebfe"
+        ]
+      },
+      "night-footer": {
+        "role": "neutral",
+        "displayName": "Noite Profunda",
+        "canonical": "oklch(12.9% 0.070 296.4)",
+        "tonalRamp": [
+          "#0f0224",
+          "#281b42",
+          "#433760",
+          "#615581",
+          "#8175a3",
+          "#a296c6",
+          "#c8bbed",
+          "#f0ebfe"
+        ]
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Grafite",
+        "canonical": "oklch(20.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ]
+      },
+      "navy-ink": {
+        "role": "neutral",
+        "displayName": "Tinta Marinho",
+        "canonical": "oklch(18.4% 0.039 242.3)",
+        "tonalRamp": [
+          "#000c1a",
+          "#122635",
+          "#2d4253",
+          "#4a6172",
+          "#698193",
+          "#8aa2b5",
+          "#afc8dc",
+          "#e0f1ff"
+        ]
+      },
+      "text-on-light-soft": {
+        "role": "neutral",
+        "displayName": "Tinta Suave",
+        "canonical": "oklch(34.9% 0.029 302.1)",
+        "tonalRamp": [
+          "#0d0815",
+          "#262130",
+          "#423c4d",
+          "#605a6b",
+          "#807a8c",
+          "#a19bae",
+          "#c7c0d4",
+          "#f2eaff"
+        ]
+      },
+      "mist": {
+        "role": "neutral",
+        "displayName": "Névoa",
+        "canonical": "oklch(88.8% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "oklch(97.9% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Branco",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ]
+      },
+      "error": {
+        "role": "error",
+        "displayName": "Erro",
+        "canonical": "oklch(76.0% 0.143 23.5)",
+        "tonalRamp": [
+          "#220000",
+          "#4a0209",
+          "#7a0916",
+          "#9e3334",
+          "#c45553",
+          "#ea7773",
+          "#fbaca7",
+          "#ffe8e7"
+        ]
+      }
+    },
+    "gradients": [
+      {
+        "name": "quiz-card",
+        "value": "linear-gradient(180deg, rgb(74 27 151 / .55), rgb(26 1 71 / .9))",
+        "purpose": "Quiz card panel."
+      },
+      {
+        "name": "close",
+        "value": "radial-gradient(120% 90% at 50% 0%, #5c10d8, #4600b8 45%, #160038 100%)",
+        "purpose": "Closing CTA section."
+      },
+      {
+        "name": "hero-leaks",
+        "value": "radial-gradient(closest-side, rgb(122 47 241 / .55), rgb(92 16 216 / .18) 55%, transparent 72%) + radial-gradient(closest-side, rgb(157 92 255 / .22), transparent 70%)",
+        "purpose": "Two light leaks behind hero content (top right, bottom left)."
+      },
+      {
+        "name": "caption-scrim",
+        "value": "linear-gradient(transparent, rgb(22 0 56 / .9))",
+        "purpose": "Night scrim under poster and plaque captions."
+      }
+    ],
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "H1 only; money phrase in glow."
+      },
+      "statement": {
+        "displayName": "Statement",
+        "purpose": "\"KP em números\" paragraph; facts white 800, revenue in glow."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Every H2; max 20ch, balanced."
+      },
+      "numeral-xl": {
+        "displayName": "Numeral XL",
+        "purpose": "Plaque milestone in the Placas photo caption."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Quiz tile values, proof card and testimonial results."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Quiz question."
+      },
+      "title-sm": {
+        "displayName": "Title SM",
+        "purpose": "Step names in the rail."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Hero lede paragraph."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraphs, quotes, FAQ answers at normal width."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Primary button labels."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels and owner lines."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Progress text, privacy note, header stat, footer."
+      }
+    },
+    "fonts": [
+      {
+        "family": "Archivo",
+        "source": "/fonts/archivo-var.woff2",
+        "axes": {
+          "wght": "100 900",
+          "wdth": "62 125"
+        },
+        "display": "swap",
+        "preload": true
+      },
+      {
+        "family": "Archivo Fallback",
+        "source": "local(Arial)",
+        "overrides": {
+          "size-adjust": "104%",
+          "ascent-override": "88%",
+          "descent-override": "21%",
+          "line-gap-override": "0%"
+        }
+      }
+    ],
+    "shadows": [
+      {
+        "name": "glow-cta",
+        "value": "0 10px 28px -8px rgb(157 92 255 / .7)",
+        "purpose": "Primary buttons."
+      },
+      {
+        "name": "glow-cta-hover",
+        "value": "0 14px 34px -8px rgb(157 92 255 / .85)",
+        "purpose": "Primary button hover."
+      },
+      {
+        "name": "glow-selected",
+        "value": "0 12px 30px -10px rgb(157 92 255 / .55)",
+        "purpose": "Selected quiz tile."
+      },
+      {
+        "name": "night-drop",
+        "value": "0 30px 60px -20px rgb(0 0 0 / .55)",
+        "purpose": "Quiz card and proof card on dark."
+      },
+      {
+        "name": "paper-lift",
+        "value": "0 18px 40px -18px rgb(22 0 56 / .45)",
+        "purpose": "Placas photos on paper."
+      },
+      {
+        "name": "glow-media",
+        "value": "0 30px 70px -20px rgb(122 47 241 / .55)",
+        "purpose": "Team photo."
+      },
+      {
+        "name": "dock",
+        "value": "0 12px 32px -6px rgb(0 0 0 / .6), 0 10px 28px -8px rgb(157 92 255 / .7)",
+        "purpose": "Sticky mobile CTA dock."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "All transitions and animations."
+      },
+      {
+        "name": "proof-reveal",
+        "value": "clip-path inset(0 0 100% 0 round 16px) -> inset(0); blur(6px) -> 0; 800ms",
+        "purpose": "The one authored motion: proof card appears on tile selection."
+      },
+      {
+        "name": "step-in",
+        "value": "opacity 0, translateY(10px) -> none; 450ms",
+        "purpose": "Quiz step change."
+      },
+      {
+        "name": "state",
+        "value": "200-350ms",
+        "purpose": "Hover, selection, button and tile feedback."
+      },
+      {
+        "name": "progress",
+        "value": "transform scaleX 600ms",
+        "purpose": "Quiz progress bar."
+      },
+      {
+        "name": "marquee",
+        "value": "translateX 60s linear infinite, paused on hover",
+        "purpose": "Partner handle strip."
+      },
+      {
+        "name": "dock",
+        "value": "translateY(140%) -> 0; 400ms",
+        "purpose": "Mobile CTA dock entering."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all durations 0.01ms",
+        "purpose": "prefers-reduced-motion collapses every animation and transition."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "560px"
+      },
+      {
+        "name": "md",
+        "value": "900px"
+      },
+      {
+        "name": "hero",
+        "value": "980px"
+      },
+      {
+        "name": "lg",
+        "value": "1000px"
+      },
+      {
+        "name": "xl",
+        "value": "1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Glow-filled action, 8px radius, 56px min height; one per viewport.",
+      "html": "<button class=\"ds-btn\">Continuar diagnóstico</button>",
+      "css": ".ds-btn { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; font-weight: 700; font-size: 1.1875rem; letter-spacing: .01em; font-stretch: 108%; color: #fff; background: var(--kp-violet-glow, #9d5cff); border: 0; border-radius: 8px; padding: 17px 26px; min-height: 56px; cursor: pointer; box-shadow: 0 10px 28px -8px rgb(157 92 255 / .7); transition: background .2s cubic-bezier(.16,1,.3,1), transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s cubic-bezier(.16,1,.3,1); } .ds-btn:hover { background: var(--kp-violet-core, #7a2ff1); box-shadow: 0 14px 34px -8px rgb(157 92 255 / .85); } .ds-btn:active { transform: translateY(1px); } .ds-btn:focus-visible { outline: 2px solid #cbb3ff; outline-offset: 3px; } .ds-btn[disabled] { opacity: .38; cursor: not-allowed; box-shadow: none; }"
+    },
+    {
+      "name": "Quiz Number Tiles",
+      "kind": "custom",
+      "refersTo": "quiz-tile",
+      "description": "2x2 radio tiles on the quiz card; selected = glow border, tint, filled check.",
+      "html": "<div class=\"ds-quiz\"><p class=\"ds-qt\">Quantas motos sua loja vende por mês?</p><div class=\"ds-tiles\"><button class=\"ds-tile\" role=\"radio\" aria-checked=\"false\"><span class=\"ds-tick\"></span><span class=\"ds-n\">1–5</span><span class=\"ds-u\">motos/mês</span></button><button class=\"ds-tile\" role=\"radio\" aria-checked=\"true\"><span class=\"ds-tick\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\"><path d=\"M5 12l5 5 9-10\"/></svg></span><span class=\"ds-n\">16–30</span><span class=\"ds-u\">motos/mês</span></button></div></div>",
+      "css": ".ds-quiz { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; color: #fff; background: linear-gradient(180deg, rgb(74 27 151 / .55), rgb(26 1 71 / .9)), #160038; border: 1px solid rgb(203 179 255 / .18); border-radius: 16px; padding: 24px; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .55); } .ds-qt { margin: 0; font-size: 1.5rem; line-height: 1.15; font-weight: 700; letter-spacing: -.02em; font-stretch: 108%; } .ds-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; } .ds-tile { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 104px; padding: 16px 16px 14px; text-align: left; color: #fff; background: rgb(22 0 56 / .65); border: 1px solid rgb(203 179 255 / .28); border-radius: 12px; cursor: pointer; transition: border-color .25s, background .25s, box-shadow .35s, transform .25s; } .ds-tile:hover { border-color: #9d5cff; background: rgb(74 27 151 / .55); } .ds-tile:active { transform: scale(.98); } .ds-tile:focus-visible { outline: 2px solid #cbb3ff; outline-offset: 3px; } .ds-tile[aria-checked=\"true\"] { border-color: #9d5cff; background: rgb(157 92 255 / .16); box-shadow: 0 12px 30px -10px rgb(157 92 255 / .55); } .ds-n { font-size: 2.1rem; line-height: 1; font-weight: 800; letter-spacing: -.02em; font-stretch: 125%; font-variant-numeric: tabular-nums lining-nums; } .ds-tile[aria-checked=\"true\"] .ds-n { color: #9d5cff; } .ds-u { font-size: .875rem; color: #d9ccff; } .ds-tick { position: absolute; top: 12px; right: 12px; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgb(203 179 255 / .4); display: grid; place-items: center; } .ds-tile[aria-checked=\"true\"] .ds-tick { background: #9d5cff; border-color: #9d5cff; }"
+    },
+    {
+      "name": "Option Row",
+      "kind": "chip",
+      "refersTo": "option-row",
+      "description": "Full-width 56px answer row for quiz steps 2-3.",
+      "html": "<div class=\"ds-rows\"><button class=\"ds-row\" role=\"radio\" aria-checked=\"true\">Dono ou sócio</button><button class=\"ds-row\" role=\"radio\" aria-checked=\"false\">Gerente</button></div>",
+      "css": ".ds-rows { display: grid; gap: 10px; padding: 16px; background: #160038; } .ds-row { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; min-height: 56px; padding: 14px 16px; text-align: left; font-weight: 600; font-size: 1rem; color: #fff; background: rgb(22 0 56 / .65); border: 1px solid rgb(203 179 255 / .28); border-radius: 12px; cursor: pointer; transition: border-color .2s, background .2s; } .ds-row:hover { border-color: #9d5cff; } .ds-row:focus-visible { outline: 2px solid #cbb3ff; outline-offset: 3px; } .ds-row[aria-checked=\"true\"] { border-color: #9d5cff; background: rgb(157 92 255 / .16); }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "White 8px field with label above; error in #ff8a85 on dark.",
+      "html": "<div class=\"ds-field\"><label for=\"ds-tel\">WhatsApp com DDD</label><input id=\"ds-tel\" placeholder=\"(00) 00000-0000\"><p class=\"ds-err\">Digite um WhatsApp com DDD, como (31) 99999-9999.</p></div>",
+      "css": ".ds-field { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; color: #fff; background: #1a0147; padding: 16px; } .ds-field label { display: block; font-size: .875rem; font-weight: 600; margin-bottom: 6px; } .ds-field input { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; width: 100%; box-sizing: border-box; font-size: 16px; color: #161616; background: #fff; border: 1px solid #dadada; border-radius: 8px; padding: 14px; min-height: 50px; } .ds-field input:focus { outline: 2px solid #cbb3ff; outline-offset: 2px; border-color: #9d5cff; } .ds-field input::placeholder { color: #6b6478; } .ds-err { margin: 6px 0 0; font-size: .8125rem; color: #ff8a85; }"
+    },
+    {
+      "name": "Proof Card",
+      "kind": "card",
+      "refersTo": "proof-card",
+      "description": "Paper result card revealed by clip-path + blur when a tile is chosen; the one authored motion.",
+      "html": "<article class=\"ds-proof\"><div class=\"ds-pv\"><span class=\"ds-play\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M8 5v14l11-7z\"/></svg></span></div><div class=\"ds-pb\"><p class=\"ds-big\">23 motos<small>na 1ª semana da loja</small></p><p class=\"ds-q\">“Logo na <b>primeira semana</b> conseguimos vender <b>23 motos</b>.”</p><p class=\"ds-who\">Túlio <span>| Shineray Bom Jesus da Lapa</span></p></div></article>",
+      "css": ".ds-proof { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; display: grid; grid-template-columns: 120px 1fr; background: #f8f8f8; color: #161616; border-radius: 16px; overflow: hidden; box-shadow: 0 30px 60px -24px rgb(0 0 0 / .6); animation: ds-reveal .8s cubic-bezier(.16,1,.3,1) both; } @keyframes ds-reveal { from { clip-path: inset(0 0 100% 0 round 16px); filter: blur(6px); } to { clip-path: inset(0 0 0 0 round 16px); filter: blur(0); } } .ds-pv { background: #4a1b97; min-height: 200px; display: grid; place-items: center; } .ds-play { width: 56px; height: 56px; border-radius: 50%; color: #fff; background: rgb(22 0 56 / .45); border: 1px solid rgb(255 255 255 / .55); display: grid; place-items: center; } .ds-pb { padding: 20px 22px 22px; } .ds-big { margin: 0; font-size: 2.6rem; line-height: 1; font-weight: 800; letter-spacing: -.025em; color: #4600b8; font-stretch: 125%; } .ds-big small { display: block; font-size: .9375rem; letter-spacing: 0; font-weight: 600; color: #161616; margin-top: 6px; font-stretch: 100%; } .ds-q { margin: 12px 0 0; line-height: 1.5; } .ds-who { margin: 12px 0 0; font-size: .875rem; font-weight: 700; color: #4600b8; } .ds-who span { font-weight: 400; color: #3d3747; }"
+    },
+    {
+      "name": "Testimonial Video Card",
+      "kind": "card",
+      "refersTo": "testimonial-card",
+      "description": "9:13 poster with result numeral, play button top-right; video loads on tap.",
+      "html": "<div class=\"ds-dv\"><div class=\"ds-poster\"><button class=\"ds-play2\" aria-label=\"Assistir depoimento\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M8 5v14l11-7z\"/></svg></button><p class=\"ds-res\">7% → 27%<small>de aprovação dos leads em 21 dias</small></p></div><div class=\"ds-txt\"><p>“Em apenas <b>21 dias</b>, saímos de <b>7%</b> para <b>mais de 27%</b>.”</p><p class=\"ds-own\">Lucas | VR Multimarcas</p></div></div>",
+      "css": ".ds-dv { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; width: 260px; color: #fff; background: #1a0147; border: 1px solid rgb(203 179 255 / .18); border-radius: 16px; overflow: hidden; } .ds-poster { position: relative; aspect-ratio: 9 / 13; background: linear-gradient(transparent 40%, rgb(22 0 56 / .92)), #4a1b97; } .ds-play2 { position: absolute; top: 12px; right: 12px; width: 48px; height: 48px; border-radius: 50%; color: #fff; background: rgb(22 0 56 / .45); border: 1px solid rgb(255 255 255 / .55); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(4px); transition: transform .2s, background .2s; } .ds-play2:hover { transform: scale(1.06); background: rgb(157 92 255 / .6); } .ds-play2:focus-visible { outline: 2px solid #cbb3ff; outline-offset: 3px; } .ds-res { position: absolute; left: 16px; right: 16px; bottom: 14px; margin: 0; font-size: 2rem; line-height: 1; font-weight: 800; letter-spacing: -.02em; font-stretch: 125%; } .ds-res small { display: block; font-size: .8125rem; font-weight: 600; letter-spacing: 0; font-stretch: 100%; color: #d9ccff; margin-top: 4px; } .ds-txt { padding: 16px 18px 20px; } .ds-txt p { margin: 0; font-size: .9375rem; color: #d9ccff; } .ds-txt b { color: #fff; } .ds-txt .ds-own { margin-top: 12px; font-size: .875rem; font-weight: 700; color: #cbb3ff; }"
+    },
+    {
+      "name": "Placa Photo",
+      "kind": "card",
+      "refersTo": "placa-photo",
+      "description": "Owner-with-plaque photo on paper, milestone numeral in the caption.",
+      "html": "<div class=\"ds-placas\"><figure class=\"ds-foto\"><figcaption><strong>1M</strong><span>Placa de Faturamento KP</span></figcaption></figure></div>",
+      "css": ".ds-placas { background: #f8f8f8; padding: 24px; } .ds-foto { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; position: relative; margin: 0; width: 240px; aspect-ratio: 4 / 5; border-radius: 16px; overflow: hidden; background: #4a1b97; box-shadow: 0 18px 40px -18px rgb(22 0 56 / .45); } .ds-foto figcaption { position: absolute; inset: auto 0 0; padding: 72px 18px 16px; background: linear-gradient(transparent, rgb(22 0 56 / .9)); color: #fff; display: flex; flex-direction: column; gap: 8px; } .ds-foto strong { font-size: 3.5rem; line-height: .9; font-weight: 800; letter-spacing: -.02em; font-stretch: 125%; color: #9d5cff; } .ds-foto span { font-size: .875rem; color: #d9ccff; }"
+    },
+    {
+      "name": "FAQ Item",
+      "kind": "custom",
+      "refersTo": "faq",
+      "description": "details/summary with a glow plus that rotates 45deg when open.",
+      "html": "<details class=\"ds-faq\" open><summary>Minha cidade é pequena. Funciona?<span><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 5v14M5 12h14\"/></svg></span></summary><p>Resposta em texto suave, com <b>fatos em negrito</b>.</p></details>",
+      "css": ".ds-faq { font-family: \"Archivo\", \"Archivo Fallback\", system-ui, sans-serif; color: #fff; background: #160038; border-top: 1px solid rgb(203 179 255 / .18); border-bottom: 1px solid rgb(203 179 255 / .18); padding: 0 16px; } .ds-faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 0; min-height: 48px; font-size: 1.125rem; font-weight: 700; letter-spacing: -.01em; font-stretch: 104%; } .ds-faq summary::-webkit-details-marker { display: none; } .ds-faq summary span { display: grid; color: #9d5cff; transition: transform .3s cubic-bezier(.16,1,.3,1); } .ds-faq[open] summary span { transform: rotate(45deg); } .ds-faq summary:focus-visible { outline: 2px solid #cbb3ff; outline-offset: 3px; } .ds-faq p { margin: 0; padding: 0 0 22px; color: #d9ccff; } .ds-faq b { color: #fff; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Noite de Faturamento",
+    "overview": "**Creative North Star: \"Noite de Faturamento\"**\n\nKP lives at night: deep violet-black fields, one luminous violet that lights up wherever there is money or a choice to make, and white numerals set wide like a scoreboard. The page behaves like the end of a strong sales month: a dark room, bright numbers, real owners holding real plaques. Purple is not decoration; it is the uniform (the team literally wears it).\n\nThe system is dark-first and diagnostic. The first viewport is a working instrument, not a poster: a quiz card asks how many motorcycles the store sells, and the answer reveals a paper proof card from a partner store of that size. Every later section restates the same grammar: an expanded headline, a short soft-lilac paragraph, proof with names and numbers. One paper section (the Placas de Faturamento gallery) is the single light pause. Density is medium; headlines are big and wide, paragraphs short, vertical space generous.\n\nType does the work that ornament would do elsewhere. A single variable family, Archivo, is stretched wide (108–125%) for headlines and numbers and kept at normal width (100%) for reading. The emotional register is confident and commercial, closer to a sports scoreboard than a SaaS dashboard.",
+    "keyCharacteristics": [
+      "Dark violet canvas (`violet-night` / `violet-ink`) with one luminous accent (`violet-glow`).",
+      "One family, two widths: expanded Archivo for headlines and numerals, normal width for reading.",
+      "Money phrases and selected answers carry the glow; the rest of the headline stays white.",
+      "Secondary text is lilac-tinted (`text-soft`), never grey.",
+      "Real photography only: KP team in purple polos, owners with plaques, testimonial posters.",
+      "Soft rectangles at 8 / 12 / 16px; circles only for small markers.",
+      "Depth from violet light and dark drop, never grey haze on dark."
+    ],
+    "rules": [
+      {
+        "name": "The One Glow Rule",
+        "body": "`violet-glow` is the only accent and it marks money or choice: one money phrase per headline, the selected answer, and the single primary action in view. Never two filled glow buttons in one viewport; the mobile dock hides while the quiz is on screen.",
+        "section": "colors"
+      },
+      {
+        "name": "The Dark-First Rule",
+        "body": "Sections default to `violet-night` / `violet-ink`, alternating. The paper Placas section is the single light pause; paper otherwise appears only inside the proof card. Do not add a second paper section.",
+        "section": "colors"
+      },
+      {
+        "name": "The Brand-Is-Purple Rule",
+        "body": "No second accent hue. Light comes from the violet family; errors use `error` on dark. Secondary text is lilac (`text-soft`), not grey.",
+        "section": "colors"
+      },
+      {
+        "name": "The Numbers-Are-Bold Rule",
+        "body": "In every claim and testimonial the number and its unit are bold (700) inside regular text; standalone numbers are 800 and expanded to wdth 125 with `tabular-nums lining-nums`. That is how KP reads at a glance.",
+        "section": "typography"
+      },
+      {
+        "name": "The Width-Is-Voice Rule",
+        "body": "Expanded width (108–125%) is for headlines, numerals and button labels; reading text stays at 100%. Never expand a paragraph; never condense a number.",
+        "section": "typography"
+      },
+      {
+        "name": "The One-Family Rule",
+        "body": "Archivo is the only typeface. Do not add a second family or load static weights; the variable file covers every role.",
+        "section": "typography"
+      },
+      {
+        "name": "The Light-Not-Haze Rule",
+        "body": "On dark grounds, lift is a violet glow or a deep black drop with a strong negative spread; never a soft grey shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep every dark section on `violet-night` (#160038) or `violet-ink` (#1A0147), alternating.",
+      "**Do** highlight exactly one money phrase per headline in `violet-glow` (#9D5CFF); use `lilac` instead on the electric closing gradient.",
+      "**Do** set headlines and numerals in expanded Archivo (wdth 108–125) and reading text at wdth 100.",
+      "**Do** use `text-soft` (#D9CCFF) for secondary text on violet and `text-on-light-soft` (#3D3747) on paper.",
+      "**Do** bold numbers and units inside quotes and claims; use `tabular-nums lining-nums` on every numeral.",
+      "**Do** use real KP team and client photos; posters first, video on tap.",
+      "**Do** keep the proof reveal (clip-path + blur, .8s) as the page's only authored motion; everything else is state feedback under .6s, and all motion collapses under `prefers-reduced-motion`.",
+      "**Do** keep tap targets at 48px minimum (56px for primary buttons and option rows)."
+    ],
+    "donts": [
+      "**Don't** introduce a second accent hue (no blue, orange, teal); light comes from the violet family.",
+      "**Don't** set body copy in `violet-glow` or small text on `violet-glow` fills (white on glow is 3.88:1).",
+      "**Don't** add eyebrow or kicker chips above headlines; the H2 carries the section on its own.",
+      "**Don't** add a second typeface or static font files; Archivo variable is the only face.",
+      "**Don't** use neutral black (#080808) grounds; the darkest surface is `night-footer` (#0B001F).",
+      "**Don't** add a second paper section or put white/ghost buttons and white text on `paper`.",
+      "**Don't** use stock photography or generic motorcycle renders.",
+      "**Don't** auto-open popups or autoplay video."
+    ]
+  }
+}
