@@ -13,11 +13,17 @@ const chips = Object.keys(handleImgs).sort().map((k, i) => ({ img: handleImgs[k]
 
 const plus = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 const tick = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
+/** FAQ answers carry <b> for the page; schema.org wants plain text. */
+const faqSchema = {
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') } })),
+};
 const playIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
 ---
 <Base
   title="KP Assessoria · Marketing e vendas para lojas de veículos"
-  description={`Assessoria de marketing e vendas para lojas de motos, carros e caminhões. Lojas assessoradas faturam mais de ${numbers.revenue} por mês. Faça o diagnóstico gratuito da sua loja.`}
+  description={`Marketing e vendas para lojas de motos, carros e caminhões. Parceiros faturam +${numbers.revenue}/mês. Faça o diagnóstico gratuito da sua loja.`}
+  schema={[faqSchema]}
 >
   <Hero />
 

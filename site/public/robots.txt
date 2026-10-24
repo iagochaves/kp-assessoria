@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://diagnostico.assessoriakp.com.br/sitemap.xml

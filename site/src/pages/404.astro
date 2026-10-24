@@ -1,0 +1,34 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import logo from '../assets/kp-monogram-white.png';
+---
+<Base
+  title="Página não encontrada · KP Assessoria"
+  description="Esta página não existe. Faça o diagnóstico gratuito da sua loja de veículos com a KP Assessoria."
+  noindex
+  skip={{ href: '#conteudo', label: 'Pular para o conteúdo' }}
+>
+  <main class="lost" id="conteudo">
+    <div class="wrap">
+      <a class="logo" href="/"><Image src={logo} alt="KP Assessoria" width={124} loading="eager" /></a>
+      <p class="code num">404</p>
+      <h1>Essa página <em>não existe.</em></h1>
+      <p class="lede">O link pode estar errado ou ser de uma campanha antiga. O diagnóstico da sua loja continua no mesmo lugar.</p>
+      <a class="btn" href="/#quiz">Fazer o diagnóstico</a>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .lost { min-height: 100svh; background: var(--night); padding-block: 18px clamp(48px, 8vw, 96px); position: relative; isolation: isolate; overflow: hidden; }
+  .lost::before { content: ""; position: absolute; inset: -30% -20% auto auto; width: min(900px, 120vw); aspect-ratio: 1; z-index: -1;
+    background: radial-gradient(closest-side, rgb(122 47 241 / .5), rgb(92 16 216 / .16) 55%, transparent 72%); }
+  .wrap { max-width: 860px; }
+  .logo { display: block; width: fit-content; }
+  .logo :global(img) { width: 124px; height: auto; }
+  .code { margin-top: clamp(28px, 6vw, 56px); font-size: .875rem; font-weight: 700; letter-spacing: .04em; color: var(--glow); }
+  h1 { margin-top: 14px; }
+  .lede { margin-top: 16px; max-width: 32.1em; font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--text-soft); }
+  .btn { display: inline-block; margin-top: 28px; }
+</style>

@@ -7,11 +7,27 @@ interface Props {
   noindex?: boolean;
   /** Target and text of the skip link. */
   skip?: { href: string; label: string };
+  /** Extra schema.org nodes for this page (e.g. FAQPage), added to the shared @graph. */
+  schema?: Record<string, unknown>[];
 }
-const { title, description, noindex = false, skip = { href: '#quiz', label: 'Pular para o diagnóstico' } } = Astro.props;
+const { title, description, noindex = false, skip = { href: '#quiz', label: 'Pular para o diagnóstico' }, schema = [] } = Astro.props;
 /** Same container as the WordPress site (Meta Pixel PageView/Lead, Clarity). Off in dev so tests do not pollute the data. */
 const gtmId = import.meta.env.PROD ? import.meta.env.PUBLIC_GTM_ID : '';
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.jpg', Astro.site);
+const org = {
+  '@type': 'ProfessionalService',
+  '@id': new URL('/#org', Astro.site).toString(),
+  name: 'KP Assessoria',
+  legalName: 'Assessoria KP',
+  taxID: '52.161.498/0001-78',
+  url: Astro.site?.toString(),
+  logo: new URL('/icon-512.png', Astro.site).toString(),
+  image: ogImage.toString(),
+  description: 'Assessoria de marketing e vendas para lojas de motos, carros e caminhões.',
+  areaServed: { '@type': 'Country', name: 'Brasil' },
+  telephone: '+55 31 97224-6252',
+};
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -26,32 +42,25 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   {noindex && <meta name="robots" content="noindex" />}
   <link rel="canonical" href={canonical} />
   <meta name="theme-color" content="#160038" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preload" href="/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
-  <script type="application/ld+json" set:html={JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    name: 'KP Assessoria',
-    url: Astro.site?.toString(),
-    description,
-    areaServed: 'BR',
-  })} />
+  <meta property="og:site_name" content="KP Assessoria" />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="KP Assessoria: sua loja vendendo mais veículos, todo mês" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': [org, ...schema] })} />
 </head>
 <body>
   {gtmId && <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`} height="0" width="0" style="display:none;visibility:hidden" title="GTM"></iframe></noscript>}
-  <Fragment set:html={`<!--
-THESIS: A página é o diagnóstico. O primeiro viewport pergunta o que a loja vende (motos, carros, caminhões ou mais de um tipo) e quanto vende e responde com prova real de parceiros, recusando o hero clássico "foto do time + botão + popup".
-OWN-WORLD: Noite violeta KP (#160038/#1a0147), um único brilho #9d5cff onde há dinheiro ou escolha, Archivo variável (expandida nos números, normal na leitura), blocos de resposta 12px, Placas em papel claro como única pausa.
-STORY: O dono entende que a KP faz loja de veículo (moto, carro, caminhão) vender mais, acredita porque vê lojas Shineray/multimarcas nomeadas com números, e responde 5 passos sem sair do topo.
-FIRST VIEWPORT: Logo + "+R$18 milhões por mês" no topo; H1 expandido; cartão do quiz abre no segmento; o passo 2 mostra 4 faixas de volume do segmento escolhido; a resposta revela a prova logo ao lado/abaixo.
-FORM: Diagnóstico ao vivo, candidato 3 de 7, seed f2832054.
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
--->`} />
   <a class="skip" href={skip.href}>{skip.label}</a>
   <slot />
 </body>
