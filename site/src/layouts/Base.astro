@@ -18,7 +18,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  {gtmId && <script is:inline define:vars={{ gtmId }}>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);</script>}
+  {/* GTM pulls ~1.6 MB of third-party JS (Meta Pixel x2, Clarity): load it after the page is idle or on the
+      first interaction, so it never competes with the first render. dataLayer pushes made before it loads are kept. */}
+  {gtmId && <script is:inline define:vars={{ gtmId }}>(function(w,d,i){w.dataLayer=w.dataLayer||[];w.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});var done=0,ev=['pointerdown','keydown','scroll','touchstart'];function load(){if(done)return;done=1;ev.forEach(function(e){w.removeEventListener(e,load)});var j=d.createElement('script');j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;d.head.appendChild(j);}function idle(){'requestIdleCallback' in w?w.requestIdleCallback(load,{timeout:2500}):setTimeout(load,1500);}ev.forEach(function(e){w.addEventListener(e,load,{passive:true})});d.readyState==='complete'?idle():w.addEventListener('load',idle);})(window,document,gtmId);</script>}
   <title>{title}</title>
   <meta name="description" content={description} />
   {noindex && <meta name="robots" content="noindex" />}

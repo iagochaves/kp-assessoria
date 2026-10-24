@@ -9,15 +9,39 @@
   src: url("/fonts/archivo-var.woff2") format("woff2-variations"), url("/fonts/archivo-var.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-/* Metric-matched fallback keeps CLS near zero while Archivo loads. */
-@font-face {
-  font-family: "Archivo Fallback";
-  src: local("Arial");
-  size-adjust: 104%;
-  ascent-override: 88%;
-  descent-override: 21%;
-  line-gap-override: 0%;
-}
+/* Metric-matched fallbacks: no layout shift when Archivo swaps in. Arial (iOS/macOS/Windows) and Roboto
+   (Android) cannot stretch, so each font-stretch the site uses gets its own size-adjust (Archivo width ÷
+   fallback width, measured in Chrome), with real regular/bold faces. Text measures use em, not ch:
+   ch follows the active font's "0", so it changes width on swap. Vertical overrides = Archivo typo
+   metrics (878/210 per 1000) ÷ size-adjust. Use through the --font-NNN tokens below. */
+@font-face { font-family: "Archivo 100 A"; src: local("Arial"), local("ArialMT"); font-weight: 100 599; size-adjust: 98.4%; ascent-override: 89.2%; descent-override: 21.3%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 100 A"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 600 900; size-adjust: 98.4%; ascent-override: 89.2%; descent-override: 21.3%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 100 R"; src: local("Roboto"), local("Roboto-Regular"); font-weight: 100 599; size-adjust: 99.1%; ascent-override: 88.6%; descent-override: 21.2%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 100 R"; src: local("Roboto Bold"), local("Roboto-Bold"); font-weight: 600 900; size-adjust: 99.1%; ascent-override: 88.6%; descent-override: 21.2%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 104 A"; src: local("Arial"), local("ArialMT"); font-weight: 100 599; size-adjust: 103.1%; ascent-override: 85.2%; descent-override: 20.4%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 104 A"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 600 900; size-adjust: 103.1%; ascent-override: 85.2%; descent-override: 20.4%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 104 R"; src: local("Roboto"), local("Roboto-Regular"); font-weight: 100 599; size-adjust: 109.0%; ascent-override: 80.6%; descent-override: 19.3%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 104 R"; src: local("Roboto Bold"), local("Roboto-Bold"); font-weight: 600 900; size-adjust: 109.0%; ascent-override: 80.6%; descent-override: 19.3%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 108 A"; src: local("Arial"), local("ArialMT"); font-weight: 100 599; size-adjust: 107.4%; ascent-override: 81.8%; descent-override: 19.6%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 108 A"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 600 900; size-adjust: 107.4%; ascent-override: 81.8%; descent-override: 19.6%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 108 R"; src: local("Roboto"), local("Roboto-Regular"); font-weight: 100 599; size-adjust: 113.5%; ascent-override: 77.4%; descent-override: 18.5%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 108 R"; src: local("Roboto Bold"), local("Roboto-Bold"); font-weight: 600 900; size-adjust: 113.5%; ascent-override: 77.4%; descent-override: 18.5%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 112 A"; src: local("Arial"), local("ArialMT"); font-weight: 100 599; size-adjust: 111.7%; ascent-override: 78.6%; descent-override: 18.8%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 112 A"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 600 900; size-adjust: 111.7%; ascent-override: 78.6%; descent-override: 18.8%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 112 R"; src: local("Roboto"), local("Roboto-Regular"); font-weight: 100 599; size-adjust: 118.0%; ascent-override: 74.4%; descent-override: 17.8%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 112 R"; src: local("Roboto Bold"), local("Roboto-Bold"); font-weight: 600 900; size-adjust: 118.0%; ascent-override: 74.4%; descent-override: 17.8%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 115 A"; src: local("Arial"), local("ArialMT"); font-weight: 100 599; size-adjust: 118.8%; ascent-override: 73.9%; descent-override: 17.7%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 115 A"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 600 900; size-adjust: 118.8%; ascent-override: 73.9%; descent-override: 17.7%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 115 R"; src: local("Roboto"), local("Roboto-Regular"); font-weight: 100 599; size-adjust: 125.1%; ascent-override: 70.2%; descent-override: 16.8%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 115 R"; src: local("Roboto Bold"), local("Roboto-Bold"); font-weight: 600 900; size-adjust: 125.1%; ascent-override: 70.2%; descent-override: 16.8%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 118 A"; src: local("Arial"), local("ArialMT"); font-weight: 100 599; size-adjust: 121.8%; ascent-override: 72.1%; descent-override: 17.2%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 118 A"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 600 900; size-adjust: 121.8%; ascent-override: 72.1%; descent-override: 17.2%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 118 R"; src: local("Roboto"), local("Roboto-Regular"); font-weight: 100 599; size-adjust: 128.3%; ascent-override: 68.4%; descent-override: 16.4%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 118 R"; src: local("Roboto Bold"), local("Roboto-Bold"); font-weight: 600 900; size-adjust: 128.3%; ascent-override: 68.4%; descent-override: 16.4%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 125 A"; src: local("Arial"), local("ArialMT"); font-weight: 100 599; size-adjust: 129.0%; ascent-override: 68.1%; descent-override: 16.3%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 125 A"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 600 900; size-adjust: 129.0%; ascent-override: 68.1%; descent-override: 16.3%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 125 R"; src: local("Roboto"), local("Roboto-Regular"); font-weight: 100 599; size-adjust: 135.9%; ascent-override: 64.6%; descent-override: 15.5%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo 125 R"; src: local("Roboto Bold"), local("Roboto-Bold"); font-weight: 600 900; size-adjust: 135.9%; ascent-override: 64.6%; descent-override: 15.5%; line-gap-override: 0%; }
 
 :root {
   --night: #160038; --ink: #1a0147; --deep: #4a1b97; --royal: #4600b8; --electric: #5c10d8;
@@ -27,7 +51,14 @@
   --text-soft: #d9ccff;
   --text-on-light-soft: #3d3747;
   --line: rgb(203 179 255 / .18);
-  --font: "Archivo", "Archivo Fallback", system-ui, sans-serif;
+  --font: "Archivo", "Archivo 100 A", "Archivo 100 R", system-ui, sans-serif;
+  /* Pair with the matching font-stretch so the fallback reserves the same width. */
+  --font-104: "Archivo", "Archivo 104 A", "Archivo 104 R", system-ui, sans-serif;
+  --font-108: "Archivo", "Archivo 108 A", "Archivo 108 R", system-ui, sans-serif;
+  --font-112: "Archivo", "Archivo 112 A", "Archivo 112 R", system-ui, sans-serif;
+  --font-115: "Archivo", "Archivo 115 A", "Archivo 115 R", system-ui, sans-serif;
+  --font-118: "Archivo", "Archivo 118 A", "Archivo 118 R", system-ui, sans-serif;
+  --font-125: "Archivo", "Archivo 125 A", "Archivo 125 R", system-ui, sans-serif;
   --ease: cubic-bezier(.16, 1, .3, 1);
   --gutter: clamp(16px, 4vw, 48px);
   --max: 1180px;
@@ -60,19 +91,19 @@ button { font: inherit; color: inherit; }
 /* ---------- Type ---------- */
 h1 {
   font-size: clamp(2.35rem, 7.4vw, 4.6rem); line-height: .98; letter-spacing: -.03em;
-  font-weight: 800; font-stretch: 118%; text-wrap: balance;
+  font-weight: 800; font-family: var(--font-118); font-stretch: 118%; text-wrap: balance;
 }
 h1 em, h2 em { font-style: normal; color: var(--glow); }
 h2 {
   font-size: clamp(1.9rem, 4.6vw, 3.2rem); line-height: 1.04; letter-spacing: -.028em;
-  font-weight: 800; font-stretch: 115%; text-wrap: balance; max-width: 20ch;
+  font-weight: 800; font-family: var(--font-115); font-stretch: 115%; text-wrap: balance; max-width: 14.4em;
 }
 .sec { padding-block: clamp(72px, 10vw, 128px); }
-.sec-lede { margin-top: 16px; max-width: 52ch; font-size: 1.0625rem; color: var(--text-soft); }
+.sec-lede { margin-top: 16px; max-width: 29.8em; font-size: 1.0625rem; color: var(--text-soft); }
 
 /* ---------- Buttons ---------- */
 .btn {
-  appearance: none; border: 0; font: inherit; font-weight: 700; font-size: 1.1875rem; letter-spacing: .01em; font-stretch: 108%;
+  appearance: none; border: 0; font: inherit; font-weight: 700; font-size: 1.1875rem; letter-spacing: .01em; font-family: var(--font-108); font-stretch: 108%;
   color: var(--white); background: var(--glow); border-radius: var(--r-sm); padding: 17px 26px; min-height: 56px; cursor: pointer;
   box-shadow: 0 10px 28px -8px rgb(157 92 255 / .7);
   transition: background .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease), opacity .2s;

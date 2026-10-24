@@ -143,14 +143,14 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
   .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
   .top img { width: 124px; height: auto; }
   .stat { font-size: .8125rem; line-height: 1.3; color: var(--text-soft); text-align: right; }
-  .stat b { color: var(--white); font-stretch: 112%; }
+  .stat b { color: var(--white); font-family: var(--font-112); font-stretch: 112%; }
 
   .hero-grid { display: grid; gap: clamp(28px, 4vw, 56px); grid-template-columns: 1fr; padding-top: clamp(8px, 3vw, 40px); }
   @media (min-width: 980px) {
     .hero-grid { grid-template-columns: 1.05fr 1fr; grid-template-areas: "intro quiz" "proof quiz"; align-items: start; row-gap: 32px; }
     .intro { grid-area: intro; } .quiz-slot { grid-area: quiz; } .proof { grid-area: proof; }
   }
-  .lede { margin-top: 20px; max-width: 46ch; font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--text-soft); }
+  .lede { margin-top: 20px; max-width: 26.3em; font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--text-soft); }
   .lede b { color: var(--white); }
 
   .quiz { position: relative; background: linear-gradient(180deg, rgb(74 27 151 / .55), rgb(26 1 71 / .9)); border: 1px solid var(--line);
@@ -160,7 +160,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
   .q-progress b { color: var(--white); }
   .bar { flex: 1; height: 4px; border-radius: 4px; background: rgb(203 179 255 / .15); overflow: hidden; max-width: 160px; }
   .bar i { display: block; height: 100%; width: 100%; transform: scaleX(.25); transform-origin: left; background: var(--glow); border-radius: inherit; transition: transform .6s var(--ease); }
-  .q-title { font-size: clamp(1.35rem, 2.6vw, 1.75rem); line-height: 1.15; font-weight: 700; letter-spacing: -.02em; font-stretch: 108%; text-wrap: balance; }
+  .q-title { font-size: clamp(1.35rem, 2.6vw, 1.75rem); line-height: 1.15; font-weight: 700; letter-spacing: -.02em; font-family: var(--font-108); font-stretch: 108%; text-wrap: balance; }
   .q-title:focus { outline: none; }
   .q-hint { margin-top: 6px; font-size: .9375rem; color: var(--text-soft); }
   .q-hint.done { margin-top: 10px; }
@@ -170,7 +170,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     border-radius: var(--r-md); padding: 16px 16px 14px; text-align: left; cursor: pointer; min-height: 104px;
     display: flex; flex-direction: column; justify-content: space-between;
     transition: border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease), box-shadow .35s var(--ease); }
-  .tile .n { font-size: clamp(1.7rem, 4.2vw, 2.3rem); line-height: 1; font-weight: 800; letter-spacing: -.02em; font-stretch: 125%; white-space: nowrap; padding-right: 22px; }
+  .tile .n { font-size: clamp(1.7rem, 4.2vw, 2.3rem); line-height: 1; font-weight: 800; letter-spacing: -.02em; font-family: var(--font-125); font-stretch: 125%; white-space: nowrap; padding-right: 22px; }
   .tile .n.new { font-size: clamp(1.15rem, 3vw, 1.45rem); }
   .tile .u { font-size: .875rem; color: var(--text-soft); }
   .tile:hover { border-color: var(--glow); background: rgb(74 27 151 / .55); }
@@ -227,9 +227,9 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(4px); transition: transform .2s var(--ease), background .2s; }
   .play:hover { transform: scale(1.06); background: rgb(157 92 255 / .6); }
   .proof-body { padding: 20px 22px 22px; }
-  .proof-big { font-size: clamp(2.2rem, 5vw, 3rem); line-height: 1; font-weight: 800; letter-spacing: -.025em; color: var(--royal); font-stretch: 125%; }
-  .proof-big small { display: block; font-size: .9375rem; letter-spacing: 0; font-weight: 600; color: var(--graphite); margin-top: 6px; font-stretch: 100%; }
-  .proof-quote { margin-top: 12px; line-height: 1.5; max-width: 52ch; }
+  .proof-big { font-size: clamp(2.2rem, 5vw, 3rem); line-height: 1; font-weight: 800; letter-spacing: -.025em; color: var(--royal); font-family: var(--font-125); font-stretch: 125%; }
+  .proof-big small { display: block; font-size: .9375rem; letter-spacing: 0; font-weight: 600; color: var(--graphite); margin-top: 6px; font-family: var(--font); font-stretch: 100%; }
+  .proof-quote { margin-top: 12px; line-height: 1.5; max-width: 29.8em; }
   .proof-who { margin-top: 12px; font-size: .875rem; font-weight: 700; color: var(--royal); }
   .proof-who span { font-weight: 400; color: var(--text-on-light-soft); }
   .proof-more { margin-top: 12px; font-size: .875rem; color: var(--text-on-light-soft); border-top: 1px solid #e4e0ea; padding-top: 12px; }
