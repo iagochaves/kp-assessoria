@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "node --test src/lib/*.test.ts",
+    "mock": "node scripts/mock-webhook.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",

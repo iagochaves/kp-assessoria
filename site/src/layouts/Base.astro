@@ -4,8 +4,13 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
+  noindex?: boolean;
+  /** Target and text of the skip link. */
+  skip?: { href: string; label: string };
 }
-const { title, description } = Astro.props;
+const { title, description, noindex = false, skip = { href: '#quiz', label: 'Pular para o diagnóstico' } } = Astro.props;
+/** Same container as the WordPress site (Meta Pixel PageView/Lead, Clarity). Off in dev so tests do not pollute the data. */
+const gtmId = import.meta.env.PROD ? import.meta.env.PUBLIC_GTM_ID : '';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -13,8 +18,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {gtmId && <script is:inline define:vars={{ gtmId }}>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);</script>}
   <title>{title}</title>
   <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex" />}
   <link rel="canonical" href={canonical} />
   <meta name="theme-color" content="#160038" />
   <link rel="icon" type="image/png" href="/favicon.png" />
@@ -34,15 +41,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   })} />
 </head>
 <body>
+  {gtmId && <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`} height="0" width="0" style="display:none;visibility:hidden" title="GTM"></iframe></noscript>}
   <Fragment set:html={`<!--
-THESIS: A página é o diagnóstico. O primeiro viewport pergunta quantas motos a loja vende e responde com prova real de parceiros, recusando o hero clássico "foto do time + botão + popup".
+THESIS: A página é o diagnóstico. O primeiro viewport pergunta o que a loja vende (motos, carros, caminhões ou mais de um tipo) e quanto vende e responde com prova real de parceiros, recusando o hero clássico "foto do time + botão + popup".
 OWN-WORLD: Noite violeta KP (#160038/#1a0147), um único brilho #9d5cff onde há dinheiro ou escolha, Archivo variável (expandida nos números, normal na leitura), blocos de resposta 12px, Placas em papel claro como única pausa.
-STORY: O dono entende que a KP faz loja de moto vender mais, acredita porque vê lojas Shineray/multimarcas nomeadas com números, e responde 4 passos sem sair do topo.
-FIRST VIEWPORT: Logo + "+R$18 milhões por mês" no topo; H1 expandido; cartão do quiz com 4 blocos (1–5, 6–15, 16–30, 30+); a resposta revela a prova logo ao lado/abaixo.
+STORY: O dono entende que a KP faz loja de veículo (moto, carro, caminhão) vender mais, acredita porque vê lojas Shineray/multimarcas nomeadas com números, e responde 5 passos sem sair do topo.
+FIRST VIEWPORT: Logo + "+R$18 milhões por mês" no topo; H1 expandido; cartão do quiz abre no segmento; o passo 2 mostra 4 faixas de volume do segmento escolhido; a resposta revela a prova logo ao lado/abaixo.
 FORM: Diagnóstico ao vivo, candidato 3 de 7, seed f2832054.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 -->`} />
-  <a class="skip" href="#quiz">Pular para o diagnóstico</a>
+  <a class="skip" href={skip.href}>{skip.label}</a>
   <slot />
 </body>
 </html>

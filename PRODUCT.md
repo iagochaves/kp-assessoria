@@ -12,13 +12,13 @@ delegated: Astro (static output) + CSS custom properties, deployed to a static h
 
 ## Users
 
-**Primary: owner of a motorcycle store in Brazil** (franchise dealer such as Shineray, or multimarcas). Small-to-mid operation, sells roughly 1–45 bikes/month, often in an interior city. Arrives from a paid ad (Meta/Instagram) on a phone, usually between customer interactions at the store. Job: "sell more bikes this month, and stop wasting money on digital that doesn't turn into sales."
+**Primary: owner of a vehicle store in Brazil** (motorcycles, cars, trucks or multimarcas; motorcycle franchise dealers such as Shineray are the largest group). Small-to-mid operation, sells roughly 1–45 units/month, often in an interior city. Arrives from a paid ad (Meta/Instagram) on a phone, usually between customer interactions at the store. Job: "sell more vehicles this month, and stop wasting money on digital that doesn't turn into sales."
 
-**Secondary:** store manager, sales leader or consultant who influences the decision (the quiz asks for role: Dono, Gerente, Consultor, Líder de vendas). Car, truck and mixed-vehicle stores are served too, but the landing page prioritizes motorcycles.
+**Secondary:** store manager, sales leader or consultant who influences the decision (the quiz asks for role: Dono, Gerente, Consultor, Líder de vendas). Since 2026-10-24 the landing page addresses motos, carros, caminhões and multimarcas equally (owner decision, matching the original home); the quiz opens on segment and adapts the volume brackets.
 
 ## Product Purpose
 
-KP Assessoria is a marketing and sales advisory for vehicle stores. It runs paid campaigns that generate leads, trains the store's sales team to close those leads, tracks the numbers that matter (investment, return, financing approval rate), and builds the store's local brand. Success for the client is measured in bikes sold and revenue, not clicks. Success for the landing page is a qualified lead (role, segment, monthly volume, revenue, contact) that the KP team calls within 8 business hours.
+KP Assessoria is a marketing and sales advisory for vehicle stores. It runs paid campaigns that generate leads, trains the store's sales team to close those leads, tracks the numbers that matter (investment, return, financing approval rate), and builds the store's local brand. Success for the client is measured in vehicles sold and revenue, not clicks. Success for the landing page is a qualified lead (role, segment, monthly volume, revenue, contact) that the KP team calls within 8 business hours.
 
 ## Positioning
 
@@ -66,7 +66,7 @@ Absent, must not be fabricated: pricing, contract terms, case studies with full 
 
 ## Product Principles
 
-1. **Money and bikes, not marketing.** Every claim is expressed in revenue, units sold or approval rate.
+1. **Money and vehicles sold, not marketing.** Every claim is expressed in revenue, units sold or approval rate.
 2. **Proof from people the visitor knows.** Named stores and owners outrank abstract claims; the Shineray network is the reference crowd.
 3. **Phone-first, ad-first.** The page is judged on a mid-range Android over 4G, opened from an ad, in under 3 seconds.
 4. **Qualify while converting.** The quiz exists so the sales team calls the right stores first; keep it short but keep the qualifying fields.

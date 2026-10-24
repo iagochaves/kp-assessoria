@@ -1,9 +1,16 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '../assets/kp-monogram-white.png';
-import { brackets, roles, revenueBands, testimonials, numbers } from '../data/content';
+import { segments, brackets, roles, testimonials, numbers } from '../data/content';
 
 const byId = Object.fromEntries(testimonials.map((t) => [t.id, t]));
+/** One proof card per lead/also pair; each lists the segment:bracket-index answers that reveal it. */
+const cards = new Map<string, { lead: string; also: string; keys: string[] }>();
+for (const seg of segments) brackets[seg.id].forEach((b, i) => {
+  const k = `${b.lead}-${b.also}`;
+  if (!cards.has(k)) cards.set(k, { lead: b.lead, also: b.also, keys: [] });
+  cards.get(k)!.keys.push(`${seg.id}:${i}`);
+});
 const endpoint = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? '';
 if (!endpoint) console.warn('[kp] PUBLIC_LEAD_ENDPOINT não definido: o formulário vai exibir erro ao enviar.');
 const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
@@ -17,44 +24,55 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
 
     <div class="hero-grid">
       <div class="intro">
-        <h1>Sua loja vendendo <em>mais motos</em>, todo mês.</h1>
-        <p class="lede">Campanha que traz comprador, time comercial treinado para fechar e alguém da KP acompanhando os números com você. <b>Faça o diagnóstico</b> e veja o que lojas parceiras conseguiram.</p>
+        <h1>Sua loja vendendo <em>mais veículos</em>, todo mês.</h1>
+        <p class="lede">Para lojas de motos, carros e caminhões: campanha que traz comprador, time comercial treinado para fechar e alguém da KP acompanhando os números com você. <b>Faça o diagnóstico</b> e veja o que lojas parceiras conseguiram.</p>
       </div>
 
-      <form class="quiz" id="quiz" novalidate aria-label="Diagnóstico da sua loja" data-endpoint={endpoint}>
+      <div class="quiz-slot" id="quiz">
+      <!-- id MQL/TOP and the form-field-* input ids are read by the live GTM container (Meta Lead tag); see src/lib/lead.ts. -->
+      <form class="quiz" id="TOP" data-lead-type="TOP" novalidate aria-label="Diagnóstico da sua loja" data-endpoint={endpoint} data-segments={JSON.stringify(Object.fromEntries(segments.map((g) => [g.id, g.value])))}>
         <div class="q-progress">
           <span id="qStepTxt" aria-live="polite">Passo <b>1</b> de 4 · menos de 30 segundos</span>
           <span class="bar" aria-hidden="true"><i id="qBar"></i></span>
         </div>
 
-        <fieldset class="step on" data-step="1" data-name="motos_mes">
-          <legend class="q-title">Quantas motos sua loja vende por mês?</legend>
-          <p class="q-hint">Somando à vista e financiado.</p>
-          <div class="tiles" role="radiogroup" aria-label="Motos por mês">
-            {brackets.map((b) => (
-              <button type="button" class="tile" role="radio" aria-checked="false" data-v={b.value}>
-                <span class="tick" set:html={check} />
-                <span class="n num">{b.label}</span>
-                <span class="u">motos/mês</span>
-              </button>
-            ))}
+        <fieldset class="step on" data-step="1" data-name="segmento">
+          <legend class="q-title">O que sua loja vende?</legend>
+          <div class="rows" role="radiogroup" aria-label="Segmento">
+            {segments.map((g) => <button type="button" class="row" role="radio" aria-checked="false" data-v={g.id}>{g.label}</button>)}
           </div>
           <div class="q-actions"><button type="button" class="btn full" data-next disabled>Continuar diagnóstico</button></div>
         </fieldset>
 
-        <fieldset class="step" data-step="2" data-name="cargo">
-          <legend class="q-title">Qual é o seu papel na loja?</legend>
-          <div class="rows" role="radiogroup" aria-label="Cargo">
-            {roles.map((r) => <button type="button" class="row" role="radio" aria-checked="false" data-v={r}>{r}</button>)}
-          </div>
+        <fieldset class="step" data-step="2" data-name="faixa">
+          <legend class="q-title" id="volQ">{segments[0].q}</legend>
+          <p class="q-hint" id="volHint">Somando à vista e financiado.</p>
+          {segments.map((g, i) => (
+            <div class="vol" data-seg={g.id} data-q={g.q} data-hint={g.kind === 'volume' ? 'Somando à vista e financiado.' : 'Faturamento bruto aproximado.'} hidden={i > 0}>
+              {g.kind === 'volume' ? (
+                <div class="tiles" role="radiogroup" aria-label={`${g.label} por mês`}>
+                  {brackets[g.id].map((b, j) => (
+                    <button type="button" class="tile" role="radio" aria-checked="false" data-v={b.value} data-i={j}>
+                      <span class="tick" set:html={check} />
+                      <span class={j === 0 ? 'n num new' : 'n num'}>{b.label}</span>
+                      <span class="u">{j === 0 ? 'loja ainda não abriu' : g.unit}</span>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div class="rows" role="radiogroup" aria-label="Faturamento mensal">
+                  {brackets[g.id].map((b, j) => <button type="button" class="row num" role="radio" aria-checked="false" data-v={b.value} data-i={j}>{b.label}</button>)}
+                </div>
+              )}
+            </div>
+          ))}
           <div class="q-actions"><button type="button" class="back" data-prev>Voltar</button><button type="button" class="btn grow" data-next disabled>Continuar</button></div>
         </fieldset>
 
-        <fieldset class="step" data-step="3" data-name="faturamento">
-          <legend class="q-title">Quanto a loja fatura por mês?</legend>
-          <p class="q-hint">Faturamento bruto aproximado.</p>
-          <div class="rows" role="radiogroup" aria-label="Faturamento mensal">
-            {revenueBands.map((r) => <button type="button" class="row num" role="radio" aria-checked="false" data-v={r}>{r}</button>)}
+        <fieldset class="step" data-step="3" data-name="cargo">
+          <legend class="q-title">Qual é o seu papel na loja?</legend>
+          <div class="rows" role="radiogroup" aria-label="Cargo">
+            {roles.map((r) => <button type="button" class="row" role="radio" aria-checked="false" data-v={r.value}>{r.label}</button>)}
           </div>
           <div class="q-actions"><button type="button" class="back" data-prev>Voltar</button><button type="button" class="btn grow" data-next disabled>Continuar</button></div>
         </fieldset>
@@ -63,14 +81,15 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
           <legend class="q-title">Falta pouco. Para onde ligamos?</legend>
           <p class="q-hint">Um especialista fala com você em até 8 horas úteis.</p>
           <div class="fields">
-            <div class="field"><label for="f-nome">Seu nome</label><input id="f-nome" name="nome" autocomplete="name" required placeholder="Ex.: João Silva" /><p class="err" id="e-nome">Digite seu nome.</p></div>
-            <div class="field"><label for="f-tel">WhatsApp com DDD</label><input id="f-tel" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="(00) 00000-0000" /><p class="err" id="e-tel">Digite um WhatsApp com DDD, como (31) 99999-9999.</p></div>
-            <div class="field"><label for="f-loja">Nome da loja</label><input id="f-loja" name="loja" autocomplete="organization" required placeholder="Ex.: Shineray Centro" /><p class="err" id="e-loja">Digite o nome da loja.</p></div>
-            <div class="field"><label for="f-email">E-mail <span class="opt">(opcional)</span></label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="voce@sualoja.com.br" /><p class="err" id="e-email">Confira o e-mail ou deixe em branco.</p></div>
+            <div class="field"><label for="form-field-name">Seu nome</label><input id="form-field-name" name="nome" autocomplete="name" required placeholder="Ex.: João Silva" /><p class="err" id="e-nome">Digite seu nome.</p></div>
+            <div class="field"><label for="form-field-field_d2afb88">WhatsApp com DDD</label><input id="form-field-field_d2afb88" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="(00) 00000-0000" /><p class="err" id="e-tel">Digite um WhatsApp com DDD, como (31) 99999-9999.</p></div>
+            <div class="field"><label for="form-field-message">Nome da loja</label><input id="form-field-message" name="loja" autocomplete="organization" required placeholder="Ex.: Silva Veículos" /><p class="err" id="e-loja">Digite o nome da loja.</p></div>
+            <div class="field"><label for="form-field-email">Seu melhor e-mail</label><input id="form-field-email" name="email" type="email" autocomplete="email" required placeholder="voce@sualoja.com.br" /><p class="err" id="e-email">Digite um e-mail válido, como voce@sualoja.com.br.</p></div>
             <input class="hp" name="empresa_site" tabindex="-1" autocomplete="off" aria-hidden="true" />
           </div>
           <p class="send-err" id="sendErr" role="alert" hidden>Não conseguimos registrar seu pedido agora. Suas respostas continuam aqui: tente de novo em alguns instantes.</p>
-          <div class="q-actions"><button type="button" class="back" data-prev>Voltar</button><button type="submit" class="btn grow" id="submitBtn">Pedir diagnóstico</button></div>
+          <!-- type="button": the native submit event (which fires the GTM Lead tag) is only dispatched after validation passes. -->
+          <div class="q-actions"><button type="button" class="back" data-prev>Voltar</button><button type="button" class="btn grow" id="submitBtn">Pedir diagnóstico</button></div>
         </fieldset>
 
         <div class="step" data-step="5" role="status" tabindex="-1">
@@ -80,17 +99,18 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
 
         <p class="q-foot"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Sem spam. Seus dados ficam só com a KP.</p>
       </form>
+      </div>
 
       <div class="proof" id="proof" aria-live="polite">
         <div class="proof-empty">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
-          <span>Escolha quantas motos sua loja vende por mês e mostramos aqui o resultado de uma loja parceira.</span>
+          <span>Diga o que sua loja vende e quanto vende por mês. Mostramos aqui o resultado de uma loja parceira.</span>
         </div>
-        {brackets.map((b) => {
-          const t = byId[b.lead];
-          const o = byId[b.also];
+        {[...cards.values()].map((c) => {
+          const t = byId[c.lead];
+          const o = byId[c.also];
           return (
-            <article class="proof-card" data-for={b.value} hidden>
+            <article class="proof-card" data-for={c.keys.join(' ')} hidden>
               <div class="proof-video">
                 <Image src={t.poster} alt={`${t.name}, ${t.store}`} widths={[200, 400]} sizes="(min-width: 560px) 150px, 100vw" loading="lazy" />
                 {t.video && (
@@ -128,13 +148,14 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
   .hero-grid { display: grid; gap: clamp(28px, 4vw, 56px); grid-template-columns: 1fr; padding-top: clamp(8px, 3vw, 40px); }
   @media (min-width: 980px) {
     .hero-grid { grid-template-columns: 1.05fr 1fr; grid-template-areas: "intro quiz" "proof quiz"; align-items: start; row-gap: 32px; }
-    .intro { grid-area: intro; } .quiz { grid-area: quiz; } .proof { grid-area: proof; }
+    .intro { grid-area: intro; } .quiz-slot { grid-area: quiz; } .proof { grid-area: proof; }
   }
   .lede { margin-top: 20px; max-width: 46ch; font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--text-soft); }
   .lede b { color: var(--white); }
 
   .quiz { position: relative; background: linear-gradient(180deg, rgb(74 27 151 / .55), rgb(26 1 71 / .9)); border: 1px solid var(--line);
-    border-radius: var(--r-lg); padding: clamp(20px, 3vw, 32px); box-shadow: 0 30px 60px -20px rgb(0 0 0 / .55); scroll-margin-top: 16px; }
+    border-radius: var(--r-lg); padding: clamp(20px, 3vw, 32px); box-shadow: 0 30px 60px -20px rgb(0 0 0 / .55); }
+  .quiz-slot { scroll-margin-top: 16px; }
   .q-progress { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: .8125rem; color: var(--text-soft); margin-bottom: 18px; }
   .q-progress b { color: var(--white); }
   .bar { flex: 1; height: 4px; border-radius: 4px; background: rgb(203 179 255 / .15); overflow: hidden; max-width: 160px; }
@@ -150,6 +171,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     display: flex; flex-direction: column; justify-content: space-between;
     transition: border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease), box-shadow .35s var(--ease); }
   .tile .n { font-size: clamp(1.7rem, 4.2vw, 2.3rem); line-height: 1; font-weight: 800; letter-spacing: -.02em; font-stretch: 125%; white-space: nowrap; padding-right: 22px; }
+  .tile .n.new { font-size: clamp(1.15rem, 3vw, 1.45rem); }
   .tile .u { font-size: .875rem; color: var(--text-soft); }
   .tile:hover { border-color: var(--glow); background: rgb(74 27 151 / .55); }
   .tile:active { transform: scale(.98); }
@@ -215,24 +237,62 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
 </style>
 
 <script>
-  const form = document.getElementById('quiz') as HTMLFormElement;
+  import { buildBody, classify, leadType, type LeadInput } from '../lib/lead';
+
+  const form = document.querySelector<HTMLFormElement>('#quiz form')!;
   const steps = [...form.querySelectorAll<HTMLElement>('.step')];
   const bar = document.getElementById('qBar')!;
   const stepTxt = document.getElementById('qStepTxt')!;
   const proof = document.getElementById('proof')!;
   const answers: Record<string, string> = {};
+  const LAST = steps.length - 1;
+  const volStep = form.querySelector<HTMLElement>('[data-name="faixa"]')!;
+  const segValue: Record<string, string> = JSON.parse(form.dataset.segments!);
   let cur = 0;
 
   const go = (i: number) => {
     steps[cur].classList.remove('on');
     cur = i;
     steps[cur].classList.add('on');
-    const n = Math.min(cur + 1, 4);
-    bar.style.transform = `scaleX(${cur >= 4 ? 1 : n / 4})`;
-    stepTxt.innerHTML = cur >= 4 ? '<b>Pronto</b>' : `Passo <b>${n}</b> de 4 · ${cur === 3 ? 'falta pouco' : 'menos de 30 segundos'}`;
-    const target = cur >= 4 ? steps[cur] : steps[cur].querySelector<HTMLElement>('[role=radio],input');
+    const n = Math.min(cur + 1, LAST);
+    bar.style.transform = `scaleX(${cur >= LAST ? 1 : n / LAST})`;
+    stepTxt.innerHTML = cur >= LAST ? '<b>Pronto</b>' : `Passo <b>${n}</b> de ${LAST} · ${cur === LAST - 1 ? 'falta pouco' : 'menos de 30 segundos'}`;
+    const target = cur >= LAST ? steps[cur] : steps[cur].querySelector<HTMLElement>('.vol:not([hidden]) [role=radio],[role=radio],input');
     if (target && cur) target.focus({ preventScroll: true });
   };
+
+  const field = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const lead = (): LeadInput => ({
+    segment: answers.segmento as LeadInput['segment'],
+    venda: segValue[answers.segmento] ?? '',
+    faixa: answers.faixa ?? '',
+    cargo: answers.cargo ?? '',
+    nome: field('form-field-name').value,
+    email: field('form-field-email').value,
+    telefone: field('form-field-field_d2afb88').value,
+    empresa: field('form-field-message').value,
+    search: location.search,
+    pageUrl: location.href,
+  });
+
+  /** Same contract as the WordPress popup script: the GTM Lead tag fires when the form id contains "MQL". */
+  function classifyForm() {
+    const c = classify(buildBody(lead()));
+    const t = leadType(c);
+    form.id = t;
+    form.dataset.leadType = t;
+    form.dataset.leadClass = c;
+    return { c, t };
+  }
+
+  function track(event: string) {
+    const { c, t } = classifyForm();
+    const w = window as unknown as { dataLayer?: object[] };
+    (w.dataLayer ??= []).push({
+      event, clickId: t, formId: t, leadType: t, lead_type: t, isMQL: t === 'MQL', lead_class: c,
+      segmento: segValue[answers.segmento] ?? '',
+    });
+  }
 
   form.querySelectorAll<HTMLElement>('[role=radiogroup]').forEach((g) => {
     const step = g.closest<HTMLElement>('.step')!;
@@ -241,7 +301,9 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
       opts.forEach((x) => { x.setAttribute('aria-checked', String(x === o)); x.tabIndex = x === o ? 0 : -1; });
       answers[step.dataset.name!] = o.dataset.v!;
       step.querySelector<HTMLButtonElement>('[data-next]')!.disabled = false;
-      if (step.dataset.step === '1') showProof(o.dataset.v!);
+      if (step === volStep) showProof(`${answers.segmento}:${o.dataset.i}`);
+      else if (step.dataset.name === 'segmento') pickSegment(o.dataset.v!);
+      classifyForm();
     };
     opts.forEach((o, i) => {
       o.tabIndex = i === 0 ? 0 : -1;
@@ -257,10 +319,26 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     });
   });
 
-  function showProof(v: string) {
+  function pickSegment(seg: string) {
+    volStep.querySelectorAll<HTMLElement>('.vol').forEach((v) => {
+      v.hidden = v.dataset.seg !== seg;
+      if (!v.hidden) {
+        document.getElementById('volQ')!.textContent = v.dataset.q!;
+        document.getElementById('volHint')!.textContent = v.dataset.hint!;
+      }
+    });
+    volStep.querySelectorAll<HTMLElement>('.vol').forEach((v) => v.querySelectorAll<HTMLElement>('[role=radio]').forEach((x, i) => {
+      x.setAttribute('aria-checked', 'false'); x.tabIndex = i === 0 ? 0 : -1;
+    }));
+    volStep.querySelector<HTMLButtonElement>('[data-next]')!.disabled = true;
+    delete answers.faixa;
+    proof.classList.remove('on');
+    proof.querySelectorAll<HTMLElement>('.proof-card').forEach((c) => { c.hidden = true; });
+  }
+  function showProof(key: string) {
     proof.classList.add('on');
     proof.querySelectorAll<HTMLElement>('.proof-card').forEach((c) => {
-      const on = c.dataset.for === v;
+      const on = c.dataset.for!.split(' ').includes(key);
       if (on) { c.hidden = false; c.style.animation = 'none'; void c.offsetWidth; c.style.animation = ''; }
       else c.hidden = true;
     });
@@ -273,20 +351,25 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
   });
 
   const digits = (s: string) => s.replace(/\D/g, '');
-  const tel = document.getElementById('f-tel') as HTMLInputElement;
+  const tel = field('form-field-field_d2afb88');
   tel.addEventListener('input', () => {
     const d = digits(tel.value).slice(0, 11);
     tel.value = d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}` : d.length > 2 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d;
   });
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const get = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const btn = document.getElementById('submitBtn') as HTMLButtonElement;
+  const sendErr = document.getElementById('sendErr')!;
+  let sending = false;
+
+  /** Validates, then dispatches the native submit event that GTM listens to (gtm.formSubmit). */
+  function trySubmit() {
+    if (sending) return;
+    const email = field('form-field-email');
     const checks: [HTMLInputElement, boolean, string][] = [
-      [get('f-nome'), get('f-nome').value.trim().length < 2, 'e-nome'],
+      [field('form-field-name'), field('form-field-name').value.trim().length < 2, 'e-nome'],
       [tel, digits(tel.value).length < 10, 'e-tel'],
-      [get('f-loja'), get('f-loja').value.trim().length < 2, 'e-loja'],
-      [get('f-email'), !!get('f-email').value.trim() && !get('f-email').checkValidity(), 'e-email'],
+      [field('form-field-message'), field('form-field-message').value.trim().length < 2, 'e-loja'],
+      [email, !email.value.trim() || !email.checkValidity(), 'e-email'],
     ];
     let first: HTMLInputElement | null = null;
     for (const [el, bad, errId] of checks) {
@@ -295,44 +378,41 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
       if (bad && !first) first = el;
     }
     if (first) { first.focus(); return; }
+    // Bots filling the honeypot see the success state without a lead or a Lead event.
+    if (form.querySelector<HTMLInputElement>('.hp')!.value) { go(LAST); return; }
+    classifyForm();
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  }
 
-    const hp = form.querySelector<HTMLInputElement>('.hp')!;
-    const btn = document.getElementById('submitBtn') as HTMLButtonElement;
-    const sendErr = document.getElementById('sendErr')!;
+  btn.addEventListener('pointerdown', () => track('kp_prepare_lead_click'));
+  btn.addEventListener('click', trySubmit);
+  steps[LAST - 1].addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT') { e.preventDefault(); trySubmit(); }
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (sending) return;
+    sending = true;
+    track('kp_form_submit');
     sendErr.hidden = true;
-    if (hp.value) { go(4); return; }
-
-    const params = new URLSearchParams(location.search);
-    const payload = {
-      ...answers,
-      segmento: 'Motos',
-      nome: get('f-nome').value.trim(),
-      whatsapp: digits(tel.value),
-      loja: get('f-loja').value.trim(),
-      email: get('f-email').value.trim(),
-      pagina: location.href,
-      utm_source: params.get('utm_source') ?? '',
-      utm_medium: params.get('utm_medium') ?? '',
-      utm_campaign: params.get('utm_campaign') ?? '',
-      utm_content: params.get('utm_content') ?? '',
-      fbclid: params.get('fbclid') ?? '',
-      enviado_em: new Date().toISOString(),
-    };
-
     btn.setAttribute('aria-busy', 'true');
     btn.disabled = true;
     try {
       const endpoint = form.dataset.endpoint;
       if (!endpoint) throw new Error('PUBLIC_LEAD_ENDPOINT ausente');
-      const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      // Form-encoded like the Elementor webhook: a CORS "simple" request, no preflight.
+      const res = await fetch(endpoint, { method: 'POST', body: new URLSearchParams(buildBody(lead())) });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      (window as any).fbq?.('track', 'Lead');
-      (window as any).dataLayer?.push({ event: 'lead', motos_mes: answers.motos_mes });
-      go(4);
+      track('kp_form_submit_success');
+      form.dataset.sent = 'true';
+      go(LAST);
+      location.assign('/obrigado/');
     } catch (err) {
       console.error('[kp] envio do lead falhou', err);
       sendErr.hidden = false;
-    } finally {
+      sending = false;
       btn.removeAttribute('aria-busy');
       btn.disabled = false;
     }
@@ -348,4 +428,9 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     b.replaceWith(v);
     v.play().catch(() => {});
   });
+
+  // One testimonial at a time: starting a video pauses the others.
+  document.addEventListener('play', (e) => {
+    document.querySelectorAll('video').forEach((o) => { if (o !== e.target) o.pause(); });
+  }, true);
 </script>

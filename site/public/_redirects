@@ -1,0 +1,8 @@
+# Old WordPress landing URLs (ads, link in bio) → new landing. Netlify keeps the query string,
+# so UTMs and fbclid reach the form. Only matters on the domain that serves this site.
+/moto                                                              /  301
+/carros                                                            /  301
+/automotivo                                                        /  301
+/kp-assessoria-escale-suas-vendas-com-estrategia-profissional      /  301
+/kp-assessoria-escale-suas-vendas-com-estrategia-profissional-2    /  301
+/teste-de-formulario                                               /  301
