@@ -41,7 +41,6 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
           <div class="rows" role="radiogroup" aria-label="Segmento">
             {segments.map((g) => <button type="button" class="row" role="radio" aria-checked="false" data-v={g.id}>{g.label}</button>)}
           </div>
-          <div class="q-actions"><button type="button" class="btn full" data-next disabled>Continuar diagnóstico</button></div>
         </fieldset>
 
         <fieldset class="step" data-step="2" data-name="faixa">
@@ -66,7 +65,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
               )}
             </div>
           ))}
-          <div class="q-actions"><button type="button" class="back" data-prev>Voltar</button><button type="button" class="btn grow" data-next disabled>Continuar</button></div>
+          <div class="q-actions"><button type="button" class="back" data-prev>Voltar</button></div>
         </fieldset>
 
         <fieldset class="step" data-step="3" data-name="cargo">
@@ -74,7 +73,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
           <div class="rows" role="radiogroup" aria-label="Cargo">
             {roles.map((r) => <button type="button" class="row" role="radio" aria-checked="false" data-v={r.value}>{r.label}</button>)}
           </div>
-          <div class="q-actions"><button type="button" class="back" data-prev>Voltar</button><button type="button" class="btn grow" data-next disabled>Continuar</button></div>
+          <div class="q-actions"><button type="button" class="back" data-prev>Voltar</button></div>
         </fieldset>
 
         <fieldset class="step" data-step="4">
@@ -189,6 +188,16 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
   .row:hover { border-color: var(--glow); }
   .row[aria-checked="true"] { border-color: var(--glow); background: rgb(157 92 255 / .16); }
 
+  /* Pick feedback: press-and-settle plus a glow ring, short enough to finish before the auto-advance. */
+  .row { position: relative; }
+  .tile.picked, .row.picked { animation: pick .3s var(--ease); }
+  .tile.picked::after, .row.picked::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; border: 2px solid var(--glow);
+    pointer-events: none; animation: ring .3s var(--ease) forwards; }
+  .tile.picked .tick { animation: tickPop .3s var(--ease); }
+  @keyframes pick { 30% { transform: scale(.97); } 65% { transform: scale(1.015); } }
+  @keyframes ring { from { opacity: .9; } to { opacity: 0; transform: scale(1.05); } }
+  @keyframes tickPop { from { transform: scale(.4); } 60% { transform: scale(1.2); } }
+
   .fields { display: grid; gap: 12px; margin-top: 20px; }
   .field label { display: block; font-size: .875rem; font-weight: 600; margin-bottom: 6px; }
   .field .opt { font-weight: 400; color: var(--text-soft); }
@@ -249,15 +258,21 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
   const volStep = form.querySelector<HTMLElement>('[data-name="faixa"]')!;
   const segValue: Record<string, string> = JSON.parse(form.dataset.segments!);
   let cur = 0;
+  /** Pending auto-advance after an option click; non-null blocks further clicks until it fires. */
+  let advance: number | null = null;
+  const ADVANCE_MS = 300;
 
   const go = (i: number) => {
+    if (advance !== null) { clearTimeout(advance); advance = null; }
     steps[cur].classList.remove('on');
     cur = i;
     steps[cur].classList.add('on');
     const n = Math.min(cur + 1, LAST);
     bar.style.transform = `scaleX(${cur >= LAST ? 1 : n / LAST})`;
     stepTxt.innerHTML = cur >= LAST ? '<b>Pronto</b>' : `Passo <b>${n}</b> de ${LAST} · ${cur === LAST - 1 ? 'falta pouco' : 'menos de 30 segundos'}`;
-    const target = cur >= LAST ? steps[cur] : steps[cur].querySelector<HTMLElement>('.vol:not([hidden]) [role=radio],[role=radio],input');
+    // Returning to an answered step lands on the answer already given.
+    const scope = steps[cur].querySelector<HTMLElement>('.vol:not([hidden])') ?? steps[cur];
+    const target = cur >= LAST ? steps[cur] : scope.querySelector<HTMLElement>('[aria-checked="true"]') ?? scope.querySelector<HTMLElement>('[role=radio],input');
     if (target && cur) target.focus({ preventScroll: true });
   };
 
@@ -299,15 +314,25 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     const opts = [...g.querySelectorAll<HTMLElement>('[role=radio]')];
     const select = (o: HTMLElement) => {
       opts.forEach((x) => { x.setAttribute('aria-checked', String(x === o)); x.tabIndex = x === o ? 0 : -1; });
+      o.classList.remove('picked'); void o.offsetWidth; o.classList.add('picked');
       answers[step.dataset.name!] = o.dataset.v!;
-      step.querySelector<HTMLButtonElement>('[data-next]')!.disabled = false;
       if (step === volStep) showProof(`${answers.segmento}:${o.dataset.i}`);
       else if (step.dataset.name === 'segmento') pickSegment(o.dataset.v!);
       classifyForm();
     };
     opts.forEach((o, i) => {
       o.tabIndex = i === 0 ? 0 : -1;
-      o.addEventListener('click', () => select(o));
+      // Drop the class once played so re-showing the step doesn't replay it.
+      const unpick = (e: AnimationEvent) => { if (e.target === o) o.classList.remove('picked'); };
+      o.addEventListener('animationend', unpick);
+      o.addEventListener('animationcancel', unpick); // the step can hide mid-animation
+      // Click, Enter and Space pick and move on, like the old LP; arrow keys only move the selection.
+      o.addEventListener('click', () => {
+        if (advance !== null) return;
+        select(o);
+        const next = steps.indexOf(step) + 1;
+        advance = window.setTimeout(() => { advance = null; go(next); }, ADVANCE_MS);
+      });
       o.addEventListener('keydown', (e) => {
         const k = e.key;
         if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(k)) return;
@@ -330,7 +355,6 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     volStep.querySelectorAll<HTMLElement>('.vol').forEach((v) => v.querySelectorAll<HTMLElement>('[role=radio]').forEach((x, i) => {
       x.setAttribute('aria-checked', 'false'); x.tabIndex = i === 0 ? 0 : -1;
     }));
-    volStep.querySelector<HTMLButtonElement>('[data-next]')!.disabled = true;
     delete answers.faixa;
     proof.classList.remove('on');
     proof.querySelectorAll<HTMLElement>('.proof-card').forEach((c) => { c.hidden = true; });
@@ -346,7 +370,6 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
 
   form.addEventListener('click', (e) => {
     const t = e.target as HTMLElement;
-    if (t.closest('[data-next]')) go(cur + 1);
     if (t.closest('[data-prev]')) go(cur - 1);
   });
 
