@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBody, classify, leadType, phone55, readUtms, WEBHOOK_KEYS as K, type LeadInput } from './lead.ts';
+import { buildBody, classify, emailOk, leadType, nationalDigits, phone55, readUtms, WEBHOOK_KEYS as K, type LeadInput } from './lead.ts';
 
 const base: LeadInput = {
   segment: 'motos', venda: 'Motos', faixa: 'Vendo de 1-4 motos/mês', cargo: 'dono',
@@ -66,4 +66,22 @@ test('classification mirrors the n8n Code node', () => {
 
 test('MQL is A or B', () => {
   assert.deepEqual((['A', 'B', 'C', 'D'] as const).map(leadType), ['MQL', 'MQL', 'TOP', 'TOP']);
+});
+
+test('WhatsApp mask keeps DDD + number when the country code or a trunk zero comes along', () => {
+  assert.equal(nationalDigits('+55 31 99999-8888'), '31999998888');
+  assert.equal(nationalDigits('5531999998888'), '31999998888');
+  assert.equal(nationalDigits('+55 (21) 3333-4444'), '2133334444');
+  assert.equal(nationalDigits('031 99999-8888'), '31999998888');
+  assert.equal(nationalDigits('(55) 99999-8888'), '55999998888'); // DDD 55 (RS) stays
+  assert.equal(nationalDigits('(31) 99999-8888 ramal 2'), '31999998888');
+  assert.equal(phone55(nationalDigits('+55 31 99999-8888')), '5531999998888');
+});
+
+test('e-mail needs a dot in the domain', () => {
+  assert.equal(emailOk('ana@loja.com.br'), true);
+  assert.equal(emailOk(' ana@loja.com '), true);
+  assert.equal(emailOk('ana@gmail'), false);
+  assert.equal(emailOk('ana@gmail.c'), false);
+  assert.equal(emailOk('ana gmail.com'), false);
 });

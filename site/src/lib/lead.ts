@@ -64,6 +64,20 @@ export function classify(body: Body): LeadClass {
 /** MQL is what the GTM "Lead" tag (Meta) counts: n8n class A or B. */
 export const leadType = (c: LeadClass) => (c === 'A' || c === 'B' ? 'MQL' : 'TOP');
 
+/**
+ * What the WhatsApp mask keeps: DDD + number, at most 11 digits. The country code (55 in front of
+ * 12 or 13 digits) and trunk zeros come off first: iPhone autofill and pasted numbers bring
+ * "+55 31 9…", and slicing to 11 before that dropped the last two digits of the number.
+ */
+export function nationalDigits(raw: string) {
+  let d = raw.replace(/\D/g, '');
+  if (d.length > 11 && d.startsWith('55')) d = d.slice(2);
+  return d.replace(/^0+/, '').slice(0, 11);
+}
+
+/** An address the browser accepts can still lack the domain's dot ("joao@gmail"): require it. */
+export const emailOk = (raw: string) => /^[^\s@]+@[^\s@]+\.[^\s@.]{2,}$/.test(raw.trim());
+
 /** Brazilian phone as the Elementor field stored it: digits only, with country code 55. */
 export function phone55(raw: string) {
   const d = raw.replace(/\D/g, '').replace(/^0+/, '');

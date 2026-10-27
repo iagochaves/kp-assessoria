@@ -248,7 +248,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
 </style>
 
 <script>
-  import { buildBody, classify, leadType, type LeadInput } from '../lib/lead';
+  import { buildBody, classify, emailOk, leadType, nationalDigits, type LeadInput } from '../lib/lead';
 
   const form = document.querySelector<HTMLFormElement>('#quiz form')!;
   const steps = [...form.querySelectorAll<HTMLElement>('.step')];
@@ -378,7 +378,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
   const digits = (s: string) => s.replace(/\D/g, '');
   const tel = field('form-field-field_d2afb88');
   tel.addEventListener('input', () => {
-    const d = digits(tel.value).slice(0, 11);
+    const d = nationalDigits(tel.value);
     tel.value = d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}` : d.length > 2 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d;
   });
 
@@ -394,7 +394,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
       [field('form-field-name'), field('form-field-name').value.trim().length < 2, 'e-nome'],
       [tel, digits(tel.value).length < 10, 'e-tel'],
       [field('form-field-message'), field('form-field-message').value.trim().length < 2, 'e-loja'],
-      [email, !email.value.trim() || !email.checkValidity(), 'e-email'],
+      [email, !emailOk(email.value) || !email.checkValidity(), 'e-email'],
     ];
     let first: HTMLInputElement | null = null;
     for (const [el, bad, errId] of checks) {
