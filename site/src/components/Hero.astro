@@ -84,7 +84,9 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
             <div class="field"><label for="form-field-field_d2afb88">WhatsApp com DDD</label><input id="form-field-field_d2afb88" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="(00) 00000-0000" /><p class="err" id="e-tel">Digite um WhatsApp com DDD, como (31) 99999-9999.</p></div>
             <div class="field"><label for="form-field-message">Nome da loja</label><input id="form-field-message" name="loja" autocomplete="organization" required placeholder="Ex.: Silva Veículos" /><p class="err" id="e-loja">Digite o nome da loja.</p></div>
             <div class="field"><label for="form-field-email">Seu melhor e-mail</label><input id="form-field-email" name="email" type="email" autocomplete="email" required placeholder="voce@sualoja.com.br" /><p class="err" id="e-email">Digite um e-mail válido, como voce@sualoja.com.br.</p></div>
-            <input class="hp" name="empresa_site" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <!-- Honeypot with a name no autofill recognizes: "empresa_site" read as a company field to
+                 Chrome and Safari autofill, which filled it for real people, and their leads were dropped as bots. -->
+            <input class="hp" name="kp_hp" tabindex="-1" autocomplete="off" aria-hidden="true" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" />
           </div>
           <p class="send-err" id="sendErr" role="alert" hidden>Não conseguimos registrar seu pedido agora. Suas respostas continuam aqui: tente de novo em alguns instantes.</p>
           <!-- type="button": the native submit event (which fires the GTM Lead tag) is only dispatched after validation passes. -->
@@ -402,7 +404,8 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     }
     if (first) { first.focus(); return; }
     // Bots filling the honeypot see the success state without a lead or a Lead event.
-    if (form.querySelector<HTMLInputElement>('.hp')!.value) { go(LAST); return; }
+    // kp_form_honeypot counts them in GTM: if it climbs, real people are being caught again.
+    if (form.querySelector<HTMLInputElement>('.hp')!.value) { track('kp_form_honeypot'); go(LAST); return; }
     classifyForm();
     if (form.requestSubmit) form.requestSubmit();
     else form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
