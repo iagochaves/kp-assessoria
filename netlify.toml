@@ -7,18 +7,21 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# Production: real n8n webhook, GTM (Meta Pixel + Clarity) and the subdomain as canonical.
+# Production: real n8n webhook, Meta Pixel PageView, GTM (Meta Lead + Clarity) and the subdomain as canonical.
 [context.production.environment]
   PUBLIC_LEAD_ENDPOINT = "https://kpadm-n8n.a6hrr3.easypanel.host/webhook/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c"
   PUBLIC_GTM_ID = "GTM-NPXMNQSL"
+  PUBLIC_META_PIXEL_ID = "3785399351716268"
   SITE_URL = "https://diagnostico.assessoriakp.com.br"
 
 # Previews and branch deploys: n8n test webhook (only answers while "Listen for test event" is on)
-# and no GTM, so tests never create real leads or pixel events.
+# and no GTM or Pixel, so tests never create real leads or pixel events.
 [context.deploy-preview.environment]
   PUBLIC_LEAD_ENDPOINT = "https://kpadm-n8n.a6hrr3.easypanel.host/webhook-test/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c"
   PUBLIC_GTM_ID = ""
+  PUBLIC_META_PIXEL_ID = ""
 
 [context.branch-deploy.environment]
   PUBLIC_LEAD_ENDPOINT = "https://kpadm-n8n.a6hrr3.easypanel.host/webhook-test/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c"
   PUBLIC_GTM_ID = ""
+  PUBLIC_META_PIXEL_ID = ""

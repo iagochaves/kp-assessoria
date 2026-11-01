@@ -11,8 +11,10 @@ interface Props {
   schema?: Record<string, unknown>[];
 }
 const { title, description, noindex = false, skip = { href: '#quiz', label: 'Pular para o diagnóstico' }, schema = [] } = Astro.props;
-/** Same container as the WordPress site (Meta Pixel PageView/Lead, Clarity). Off in dev so tests do not pollute the data. */
+/** Same container as the WordPress site (Meta Pixel Lead, Clarity). Off in dev so tests do not pollute the data. */
 const gtmId = import.meta.env.PROD ? import.meta.env.PUBLIC_GTM_ID : '';
+/** PageView fires from here, not GTM: Meta only counts a landing page view once it fires, so it can't wait for the container. */
+const pixelId = import.meta.env.PROD ? import.meta.env.PUBLIC_META_PIXEL_ID : '';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.jpg', Astro.site);
 const org = {
@@ -35,7 +37,10 @@ const org = {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  {/* GTM pulls ~1.6 MB of third-party JS (Meta Pixel x2, Clarity): load it after the page is idle or on the
+  {pixelId && <link rel="preconnect" href="https://www.facebook.com" />}
+  {pixelId && <script is:inline define:vars={{ pixelId }}>!function(w){if(w.fbq)return;var n=w.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};w._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[]}(window);fbq('init',pixelId);fbq('track','PageView');</script>}
+  {pixelId && <script is:inline async src="https://connect.facebook.net/en_US/fbevents.js"></script>}
+  {/* GTM pulls ~1.6 MB of third-party JS (Meta Lead tag, Clarity): load it after the page is idle or on the
       first interaction, so it never competes with the first render. dataLayer pushes made before it loads are kept. */}
   {gtmId && <script is:inline define:vars={{ gtmId }}>(function(w,d,i){w.dataLayer=w.dataLayer||[];w.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});var done=0,ev=['pointerdown','keydown','scroll','touchstart'];function load(){if(done)return;done=1;ev.forEach(function(e){w.removeEventListener(e,load)});var j=d.createElement('script');j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;d.head.appendChild(j);}function idle(){'requestIdleCallback' in w?w.requestIdleCallback(load,{timeout:2500}):setTimeout(load,1500);}ev.forEach(function(e){w.addEventListener(e,load,{passive:true})});d.readyState==='complete'?idle():w.addEventListener('load',idle);})(window,document,gtmId);</script>}
   <title>{title}</title>
