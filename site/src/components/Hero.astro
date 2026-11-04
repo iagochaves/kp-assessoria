@@ -248,6 +248,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
 <script>
   import { buildBody, classify, emailOk, leadType, nationalDigits, type LeadInput } from '../lib/lead';
   import { toFormBody } from '../lib/forms';
+  import { leadEvent, pushLeadThen } from '../lib/tracking';
 
   const form = document.querySelector<HTMLFormElement>('#quiz form')!;
   const steps = [...form.querySelectorAll<HTMLElement>('.step')];
@@ -437,7 +438,9 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
       track('kp_form_submit_success');
       form.dataset.sent = 'true';
       go(LAST);
-      location.assign('/obrigado/');
+      // The lead is stored: tell GTM (Meta Lead for MQL) and leave once its tags ran, 1.5 s at most.
+      const w = window as unknown as { dataLayer?: object[] };
+      pushLeadThen((w.dataLayer ??= []), leadEvent(lead(), classifyForm().c, leadId), () => location.assign('/obrigado/'));
     } catch (err) {
       console.error('[kp] envio do lead falhou', err);
       sendErr.hidden = false;
