@@ -43,8 +43,10 @@ export const isLeadSubmission = (d: Record<string, string>) => (d['form-name'] ?
 export type Delivery = { ok: boolean; attempts: number; status: number };
 
 /**
- * POSTs the lead to n8n the way the Elementor webhook did (form-encoded), two attempts at most.
- * status 0 = no HTTP answer (network error or timeout). When both fail the lead is still in Netlify Forms.
+ * POSTs the lead to n8n the way the Elementor webhook did (form-encoded). It retries once, and only when
+ * the connection itself failed: after an HTTP error or a timeout n8n may already have run the workflow,
+ * and a second post would duplicate the lead in the CRM. status 0 = no HTTP answer.
+ * Whatever happens, the lead is still in Netlify Forms and in the notification e-mail.
  */
 export async function deliverToN8n(url: string, d: Record<string, string>, fetchImpl: typeof fetch = fetch, waitMs = 2000): Promise<Delivery> {
   const body = new URLSearchParams(n8nBody(d)).toString();
@@ -58,9 +60,10 @@ export async function deliverToN8n(url: string, d: Record<string, string>, fetch
         signal: AbortSignal.timeout(8000),
       });
       status = res.status;
-      if (res.ok) return { ok: true, attempts: attempt, status };
-    } catch {
+      return { ok: res.ok, attempts: attempt, status };
+    } catch (err) {
       status = 0;
+      if ((err as Error).name === 'TimeoutError') return { ok: false, attempts: attempt, status };
     }
     if (attempt < 2) await new Promise((r) => setTimeout(r, waitMs));
   }

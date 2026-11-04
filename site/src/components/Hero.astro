@@ -27,7 +27,9 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
       </div>
 
       <div class="quiz-slot" id="quiz">
-      <!-- Submits to Netlify Forms (form "lead", public/__forms.html); the lead-to-n8n function forwards it to n8n. -->
+      <!-- Submits to Netlify Forms (form "lead", public/__forms.html); the lead-to-n8n function forwards it to n8n.
+           Until production moves to the LP's own GTM container, keep id MQL/TOP and the form-field-* ids:
+           the old container (GTM-NPXMNQSL) still reads them for the Meta Lead. -->
       <form class="quiz" id="TOP" data-lead-type="TOP" novalidate aria-label="Diagnóstico da sua loja" data-segments={JSON.stringify(Object.fromEntries(segments.map((g) => [g.id, g.value])))}>
         <div class="q-progress">
           <span id="qStepTxt" aria-live="polite">Passo <b>1</b> de 4 · menos de 30 segundos</span>

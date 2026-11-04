@@ -61,17 +61,15 @@ test('deliverToN8n posts the n8n body form-encoded and stops at the first 2xx', 
   assert.deepEqual(Object.fromEntries(new URLSearchParams(log[0].body)), n8nBody(d));
 });
 
-test('deliverToN8n retries once after a 5xx or a network error', async () => {
-  const log: { url: string; body: string }[] = [];
+test('deliverToN8n retries once after a connection error', async () => {
   const d = Object.fromEntries(toFormBody(base, 'id-1'));
-  assert.deepEqual(await deliverToN8n('u', d, okFetch(log, [502, 200]), 0), { ok: true, attempts: 2, status: 200 });
   assert.deepEqual(await deliverToN8n('u', d, okFetch([], [0, 200]), 0), { ok: true, attempts: 2, status: 200 });
 });
 
 test('deliverToN8n gives up after two failed attempts', async () => {
   const log: { url: string; body: string }[] = [];
   const d = Object.fromEntries(toFormBody(base, 'id-1'));
-  assert.deepEqual(await deliverToN8n('u', d, okFetch(log, [500, 0]), 0), { ok: false, attempts: 2, status: 0 });
+  assert.deepEqual(await deliverToN8n('u', d, okFetch(log, [0, 0]), 0), { ok: false, attempts: 2, status: 0 });
   assert.equal(log.length, 2);
 });
 
@@ -79,4 +77,25 @@ test('isLeadSubmission ignores other forms but keeps posts without form-name', (
   assert.equal(isLeadSubmission({ 'form-name': 'lead', lead_id: 'x' }), true);
   assert.equal(isLeadSubmission({ lead_id: 'x' }), true);
   assert.equal(isLeadSubmission({ 'form-name': 'contato', lead_id: 'x' }), false);
+});
+
+const failWith = (err: Error) => (async () => { throw err; }) as unknown as typeof fetch;
+
+test('deliverToN8n does not retry an HTTP error: n8n may already have started the workflow', async () => {
+  const log: { url: string; body: string }[] = [];
+  const d = Object.fromEntries(toFormBody(base, 'id-1'));
+  assert.deepEqual(await deliverToN8n('u', d, okFetch(log, [502, 200]), 0), { ok: false, attempts: 1, status: 502 });
+  assert.equal(log.length, 1);
+});
+
+test('deliverToN8n does not retry a timeout: the first post may have reached n8n', async () => {
+  let calls = 0;
+  const timeout = Object.assign(new Error('timed out'), { name: 'TimeoutError' });
+  const f = (async () => { calls++; throw timeout; }) as unknown as typeof fetch;
+  assert.deepEqual(await deliverToN8n('u', {}, f, 0), { ok: false, attempts: 1, status: 0 });
+  assert.equal(calls, 1);
+});
+
+test('deliverToN8n retries when the connection itself failed', async () => {
+  assert.deepEqual(await deliverToN8n('u', {}, failWith(new TypeError('fetch failed')), 0), { ok: false, attempts: 2, status: 0 });
 });

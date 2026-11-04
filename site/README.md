@@ -15,6 +15,9 @@ npm run preview
 
 ## Antes de publicar
 
+Na primeira vez, a configuração do Netlify Forms (item 1) vem **antes** do deploy que usa o form: sem form detection ligada, o `POST /__forms.html` falha e o visitante vê o erro de envio.
+
+
 1. **Lead.** O quiz posta no Netlify Forms (form `lead`, campos em `public/__forms.html` e `src/lib/forms.ts`). A função `netlify/functions/lead-to-n8n.mts` repassa cada submissão verificada ao n8n, no corpo do webhook do Elementor (`src/lib/lead.ts`) mais `lead_id`. No Netlify: Forms → **Enable form detection**; `N8N_WEBHOOK_URL` por contexto (ver `netlify.toml`); Forms → Submission notifications → email do comercial, que é o fallback se o n8n falhar. Submissões marcadas como spam pelo Akismet ficam em Forms → `lead` → Spam e não vão ao n8n.
 2. **GTM.** Container próprio da landing em `gtm/container.json` (ver `gtm/README.md`). O Lead do Meta sai do evento `kp_lead` do dataLayer.
 3. **Hospedagem.** Qualquer CDN estático (Cloudflare Pages, Netlify, Vercel). `public/_headers` já traz headers de segurança e cache (formato Netlify/Cloudflare Pages).

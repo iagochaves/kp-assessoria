@@ -370,6 +370,17 @@ git commit -m "Load GTM as soon as the head is parsed and add the tracking timin
 
 ---
 
+### Ordem de release (achado da revisão final, 2026-11-04)
+
+O merge em `main` publica em produção, e a partir daí o quiz posta no Netlify Forms. Por isso a configuração do Netlify vem **antes do merge**, não na Task 5:
+
+1. Netlify: Forms → **Enable form detection**.
+2. `N8N_WEBHOOK_URL` com escopo Functions, **um valor por contexto**: produção com `/webhook/…`, deploy-preview e branch-deploy com `/webhook-test/…`. Um valor só para todos os contextos faria os testes de preview criarem leads no n8n de produção.
+3. Forms → Submission notifications → email do comercial para o form `lead`.
+4. Abrir PR deste branch e testar no deploy preview (Task 2 Step 8): submissão Verified, log da função com 200, execução no n8n de teste.
+5. Só então merge. Até a Task 5 a produção continua no container GTM-NPXMNQSL, que segue funcionando: o form ainda tem id `MQL`/`TOP`, os ids `form-field-*` e o `requestSubmit`. O container antigo ignora o `kp_lead`.
+6. Task 5 (container novo) depois, em outro PR.
+
 ### Task 5: Trocar o id e fazer o release
 
 **Files:**
