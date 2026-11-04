@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node --test src/lib/*.test.ts",
+    "test": "node --test src/lib/*.test.ts gtm/*.test.ts",
     "mock": "node scripts/mock-webhook.mjs"
   },
   "dependencies": {
