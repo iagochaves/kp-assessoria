@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "node --test src/lib/*.test.ts gtm/*.test.ts",
-    "mock": "node scripts/mock-webhook.mjs"
+    "mock": "node scripts/mock-webhook.mjs",
+    "measure": "node scripts/measure-tracking.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
@@ -16,6 +17,7 @@
     "sharp": "^0.35.5"
   },
   "devDependencies": {
-    "@netlify/functions": "^6.0.3"
+    "@netlify/functions": "^6.0.3",
+    "playwright": "^1.57.0"
   }
 }

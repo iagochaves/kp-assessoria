@@ -11,7 +11,7 @@ interface Props {
   schema?: Record<string, unknown>[];
 }
 const { title, description, noindex = false, skip = { href: '#quiz', label: 'Pular para o diagnóstico' }, schema = [] } = Astro.props;
-/** Same container as the WordPress site (Meta Pixel PageView/Lead, Clarity). Off in dev so tests do not pollute the data. */
+/** LP container (gtm/container.json): Meta PageView on Initialization, Lead on kp_lead, Clarity after load. Off in dev so tests do not pollute the data. */
 const gtmId = import.meta.env.PROD ? import.meta.env.PUBLIC_GTM_ID : '';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.jpg', Astro.site);
@@ -35,9 +35,14 @@ const org = {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  {/* GTM pulls ~1.6 MB of third-party JS (Meta Pixel x2, Clarity): load it after the page is idle or on the
-      first interaction, so it never competes with the first render. dataLayer pushes made before it loads are kept. */}
-  {gtmId && <script is:inline define:vars={{ gtmId }}>(function(w,d,i){w.dataLayer=w.dataLayer||[];w.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});var done=0,ev=['pointerdown','keydown','scroll','touchstart'];function load(){if(done)return;done=1;ev.forEach(function(e){w.removeEventListener(e,load)});var j=d.createElement('script');j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;d.head.appendChild(j);}function idle(){'requestIdleCallback' in w?w.requestIdleCallback(load,{timeout:2500}):setTimeout(load,1500);}ev.forEach(function(e){w.addEventListener(e,load,{passive:true})});d.readyState==='complete'?idle():w.addEventListener('load',idle);})(window,document,gtmId);</script>}
+  {/* GTM starts downloading while the head is parsed: the Meta PageView (Initialization trigger) is what turns
+      an ad click into a landing page view, and every second of delay loses the visitors who leave early.
+      Clarity waits for window load inside the container, so it never competes with the first render. */}
+  {gtmId && <link rel="preconnect" href="https://www.googletagmanager.com" />}
+  {/* The Meta tag in GTM injects fbevents.js only after gtm.js arrives; preloading it overlaps the two
+      downloads (same URL and no crossorigin, so GTM's script reuses the preloaded copy). */}
+  {gtmId && <link rel="preload" href="https://connect.facebook.net/en_US/fbevents.js" as="script" />}
+  {gtmId && <script is:inline define:vars={{ gtmId }}>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);</script>}
   <title>{title}</title>
   <meta name="description" content={description} />
   {noindex && <meta name="robots" content="noindex" />}
