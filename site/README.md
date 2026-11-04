@@ -6,18 +6,17 @@ Astro estático, sem framework de UI. O quiz é o único JavaScript da página (
 
 ```bash
 npm install
-cp .env.example .env   # preencha PUBLIC_LEAD_ENDPOINT
+cp .env.example .env
 npm run dev            # http://localhost:4321
+npm run mock           # outro terminal: recebe o quiz no lugar do Netlify Forms e mostra o corpo do n8n
 npm run build          # gera dist/
 npm run preview
 ```
 
 ## Antes de publicar
 
-1. **`PUBLIC_LEAD_ENDPOINT`** (obrigatório). URL que recebe o lead em `POST` JSON. Sem ela o formulário mostra erro ao enviar, de propósito, para nenhum lead se perder em silêncio. Campos enviados:
-   `motos_mes, cargo, faturamento, segmento, nome, whatsapp, loja, email, pagina, utm_source, utm_medium, utm_campaign, utm_content, fbclid, enviado_em`.
-   O endpoint precisa aceitar CORS do domínio do site.
-2. **Pixel / GTM.** Ao enviar com sucesso o quiz dispara `fbq('track','Lead')` e `dataLayer.push({event:'lead'})` se existirem. Inclua o script do Pixel/GTM em `src/layouts/Base.astro`.
+1. **Lead.** O quiz posta no Netlify Forms (form `lead`, campos em `public/__forms.html` e `src/lib/forms.ts`). A função `netlify/functions/lead-to-n8n.mts` repassa cada submissão verificada ao n8n, no corpo do webhook do Elementor (`src/lib/lead.ts`) mais `lead_id`. No Netlify: Forms → **Enable form detection**; `N8N_WEBHOOK_URL` por contexto (ver `netlify.toml`); Forms → Submission notifications → email do comercial, que é o fallback se o n8n falhar. Submissões marcadas como spam pelo Akismet ficam em Forms → `lead` → Spam e não vão ao n8n.
+2. **GTM.** Container próprio da landing em `gtm/container.json` (ver `gtm/README.md`). O Lead do Meta sai do evento `kp_lead` do dataLayer.
 3. **Hospedagem.** Qualquer CDN estático (Cloudflare Pages, Netlify, Vercel). `public/_headers` já traz headers de segurança e cache (formato Netlify/Cloudflare Pages).
 
 ## Onde editar conteúdo
@@ -30,7 +29,6 @@ Tudo em `src/data/content.ts`: números oficiais, depoimentos (texto literal da 
 
 ## Pendências do cliente
 
-- Endpoint do lead (acima).
 - Vídeos de Lívia, Renan e Vanessa (hoje só têm capa).
 - Número de WhatsApp da KP, se quiserem um CTA alternativo (o link `wa.me` do site atual é da agência que o desenvolveu).
 - Fotos de placas com nome da loja e cidade, para legendar a galeria.

@@ -11,8 +11,6 @@ for (const seg of segments) brackets[seg.id].forEach((b, i) => {
   if (!cards.has(k)) cards.set(k, { lead: b.lead, also: b.also, keys: [] });
   cards.get(k)!.keys.push(`${seg.id}:${i}`);
 });
-const endpoint = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? '';
-if (!endpoint) console.warn('[kp] PUBLIC_LEAD_ENDPOINT não definido: o formulário vai exibir erro ao enviar.');
 const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
 ---
 <header class="hero" id="topo">
@@ -29,8 +27,8 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
       </div>
 
       <div class="quiz-slot" id="quiz">
-      <!-- id MQL/TOP and the form-field-* input ids are read by the live GTM container (Meta Lead tag); see src/lib/lead.ts. -->
-      <form class="quiz" id="TOP" data-lead-type="TOP" novalidate aria-label="Diagnóstico da sua loja" data-endpoint={endpoint} data-segments={JSON.stringify(Object.fromEntries(segments.map((g) => [g.id, g.value])))}>
+      <!-- Submits to Netlify Forms (form "lead", public/__forms.html); the lead-to-n8n function forwards it to n8n. -->
+      <form class="quiz" id="TOP" data-lead-type="TOP" novalidate aria-label="Diagnóstico da sua loja" data-segments={JSON.stringify(Object.fromEntries(segments.map((g) => [g.id, g.value])))}>
         <div class="q-progress">
           <span id="qStepTxt" aria-live="polite">Passo <b>1</b> de 4 · menos de 30 segundos</span>
           <span class="bar" aria-hidden="true"><i id="qBar"></i></span>
@@ -249,6 +247,7 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
 
 <script>
   import { buildBody, classify, emailOk, leadType, nationalDigits, type LeadInput } from '../lib/lead';
+  import { toFormBody } from '../lib/forms';
 
   const form = document.querySelector<HTMLFormElement>('#quiz form')!;
   const steps = [...form.querySelectorAll<HTMLElement>('.step')];
@@ -426,10 +425,14 @@ const check = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" strok
     btn.setAttribute('aria-busy', 'true');
     btn.disabled = true;
     try {
-      const endpoint = form.dataset.endpoint;
-      if (!endpoint) throw new Error('PUBLIC_LEAD_ENDPOINT ausente');
-      // Form-encoded like the Elementor webhook: a CORS "simple" request, no preflight.
-      const res = await fetch(endpoint, { method: 'POST', body: new URLSearchParams(buildBody(lead())) });
+      // Same-origin post to Netlify Forms: the lead is stored before n8n is even called, and ad blockers
+      // or CORS cannot block it. Netlify answers 404 if the field names drift from public/__forms.html.
+      const leadId = crypto.randomUUID();
+      const res = await fetch(import.meta.env.PUBLIC_FORMS_URL || '/__forms.html', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: toFormBody(lead(), leadId).toString(),
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       track('kp_form_submit_success');
       form.dataset.sent = 'true';

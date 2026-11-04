@@ -7,18 +7,21 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# Production: real n8n webhook, GTM (Meta Pixel + Clarity) and the subdomain as canonical.
+# Leads: the quiz posts to Netlify Forms (form "lead") and netlify/functions/lead-to-n8n.mts forwards each
+# verified submission to n8n. Its URL is N8N_WEBHOOK_URL, set in the Netlify UI per deploy context
+# (scope: Functions), because functions do not see the variables below at runtime:
+#   production                     https://kpadm-n8n.a6hrr3.easypanel.host/webhook/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c
+#   deploy-preview, branch-deploy  https://kpadm-n8n.a6hrr3.easypanel.host/webhook-test/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c
+
+# Production: GTM (Meta Pixel + Clarity) and the subdomain as canonical.
 [context.production.environment]
-  PUBLIC_LEAD_ENDPOINT = "https://kpadm-n8n.a6hrr3.easypanel.host/webhook/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c"
   PUBLIC_GTM_ID = "GTM-NPXMNQSL"
   SITE_URL = "https://diagnostico.assessoriakp.com.br"
 
-# Previews and branch deploys: n8n test webhook (only answers while "Listen for test event" is on)
-# and no GTM, so tests never create real leads or pixel events.
+# Previews and branch deploys: no GTM, so tests never create pixel events. Their N8N_WEBHOOK_URL is the
+# n8n test webhook (only answers while "Listen for test event" is on).
 [context.deploy-preview.environment]
-  PUBLIC_LEAD_ENDPOINT = "https://kpadm-n8n.a6hrr3.easypanel.host/webhook-test/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c"
   PUBLIC_GTM_ID = ""
 
 [context.branch-deploy.environment]
-  PUBLIC_LEAD_ENDPOINT = "https://kpadm-n8n.a6hrr3.easypanel.host/webhook-test/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c"
   PUBLIC_GTM_ID = ""
