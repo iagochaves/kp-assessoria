@@ -1,6 +1,6 @@
 # GTM container da landing (diagnostico.assessoriakp.com.br)
 
-`container.json` é a configuração do GTM desta landing, no formato de export do GTM. Ele é a fonte da verdade: o que está publicado no GTM tem que bater com este arquivo. `container.test.ts` trava as regras (rode `npm test`).
+`container.json` é a configuração do GTM desta landing (container **GTM-MG2NW6DJ**, "KP - LP Diagnóstico"), no formato de export do GTM. Ele é a fonte da verdade: o que está publicado no GTM tem que bater com este arquivo. `container.test.ts` trava as regras (rode `npm test`).
 
 O WordPress (assessoriakp.com.br) continua no container antigo, GTM-NPXMNQSL. Não importe este arquivo nele.
 
