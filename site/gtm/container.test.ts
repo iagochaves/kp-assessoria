@@ -34,6 +34,14 @@ test('PageView fires on Initialization - All Pages, once per load', () => {
   assert.equal(pv.tagFiringOption, 'ONCE_PER_LOAD');
 });
 
+test('PageView reuses the event id of the inline beacon, so Meta deduplicates the two', () => {
+  // src/layouts/Base.astro sends the PageView beacon first and keeps its id in window.kpPageViewId.
+  assert.equal(param(byEvent('PageView'), 'eventId')?.value, '{{JS - kpPageViewId}}');
+  const jsVar = v.variable.find((x: { name: string }) => x.name === 'JS - kpPageViewId');
+  assert.equal(jsVar?.type, 'j');
+  assert.equal(jsVar?.parameter.find((p: Param) => p.key === 'name')?.value, 'kpPageViewId');
+});
+
 test('Lead fires only on kp_lead with lead_type MQL', () => {
   const lead = byEvent('Lead');
   assert.equal(lead.firingTriggerId.length, 1);

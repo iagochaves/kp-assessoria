@@ -13,6 +13,8 @@ interface Props {
 const { title, description, noindex = false, skip = { href: '#quiz', label: 'Pular para o diagnóstico' }, schema = [] } = Astro.props;
 /** LP container (gtm/container.json): Meta PageView on Initialization, Lead on kp_lead, Clarity after load. Off in dev so tests do not pollute the data. */
 const gtmId = import.meta.env.PROD ? import.meta.env.PUBLIC_GTM_ID : '';
+/** Same pixel as the container's Meta tags (gtm/container.json, "Const - Meta Pixel ID"). */
+const pixelId = import.meta.env.PUBLIC_META_PIXEL_ID ?? '';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.jpg', Astro.site);
 const org = {
@@ -35,14 +37,24 @@ const org = {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  {/* GTM starts downloading while the head is parsed: the Meta PageView (Initialization trigger) is what turns
-      an ad click into a landing page view, and every second of delay loses the visitors who leave early.
-      Clarity waits for window load inside the container, so it never competes with the first render. */}
-  {gtmId && <link rel="preconnect" href="https://www.googletagmanager.com" />}
-  {/* The Meta tag in GTM injects fbevents.js only after gtm.js arrives; preloading it overlaps the two
-      downloads (same URL and no crossorigin, so GTM's script reuses the preloaded copy). */}
-  {gtmId && <link rel="preload" href="https://connect.facebook.net/en_US/fbevents.js" as="script" />}
-  {gtmId && <script is:inline define:vars={{ gtmId }}>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);</script>}
+  {/* The Meta PageView is what turns an ad click into a landing page view, so it goes out as a plain image
+      beacon while the head is parsed: no script to download or run. Its event id is kept in kpPageViewId so the
+      GTM PageView tag can send the same id and Meta deduplicates the two.
+      GTM (and with it fbevents.js, the Meta config and Clarity, about 400 KB of JS) only loads after window load
+      and the first paint, so it never competes with the first render. When it ran before the paint, mobile
+      Lighthouse counted those downloads in FCP/LCP and swung between 66 and 100. */}
+  {gtmId && <script is:inline define:vars={{ gtmId, pixelId }}>(function(w,d){
+    var c=w.crypto,e=c&&c.randomUUID?c.randomUUID():Date.now()+'.'+Math.random().toString(36).slice(2);
+    w.kpPageViewId=e;
+    if(pixelId){new Image().src='https://www.facebook.com/tr/?id='+pixelId+'&ev=PageView&eid='+encodeURIComponent(e)+'&dl='+encodeURIComponent(location.href)+'&rl='+encodeURIComponent(d.referrer)+'&ts='+Date.now();}
+    w.dataLayer=w.dataLayer||[];
+    var done=0;
+    function gtm(){if(done++)return;w.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});var j=d.createElement('script');j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+gtmId;d.head.appendChild(j);}
+    // Window load can come before the first paint (Chrome may hold the first frame), so also wait for it.
+    // A background tab never paints: the timeout still loads GTM there, so the Lead tag is always ready.
+    function painted(){setTimeout(gtm,4000);try{var o=new PerformanceObserver(function(l){if(l.getEntriesByName('first-contentful-paint').length){o.disconnect();setTimeout(gtm,0);}});o.observe({type:'paint',buffered:true});}catch(_){gtm();}}
+    if(d.readyState==='complete')painted();else w.addEventListener('load',painted,{once:true});
+  })(window,document);</script>}
   <title>{title}</title>
   <meta name="description" content={description} />
   {noindex && <meta name="robots" content="noindex" />}

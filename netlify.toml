@@ -13,9 +13,11 @@
 #   production                     https://kpadm-n8n.a6hrr3.easypanel.host/webhook/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c
 #   deploy-preview, branch-deploy  https://kpadm-n8n.a6hrr3.easypanel.host/webhook-test/0f7d41ea-76e5-4c56-b1ad-078b867e1c1c
 
-# Production: the LP's own GTM container (Meta Pixel + Clarity, see site/gtm/) and the subdomain as canonical.
+# Production: the LP's own GTM container (Meta Pixel + Clarity, see site/gtm/), the Pixel id for the inline PageView
+# beacon (src/layouts/Base.astro; same pixel as the container) and the subdomain as canonical.
 [context.production.environment]
   PUBLIC_GTM_ID = "GTM-MG2NW6DJ"
+  PUBLIC_META_PIXEL_ID = "3785399351716268"
   SITE_URL = "https://diagnostico.assessoriakp.com.br"
 
 # Previews and branch deploys: no GTM, so tests never create pixel events. Their N8N_WEBHOOK_URL is the

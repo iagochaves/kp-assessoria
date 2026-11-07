@@ -73,6 +73,11 @@
             "type": "BOOLEAN",
             "key": "advancedMatching",
             "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventId",
+            "value": "{{JS - kpPageViewId}}"
           }
         ],
         "firingTriggerId": [
@@ -510,6 +515,19 @@
             "type": "TEMPLATE",
             "key": "name",
             "value": "user_data.ln"
+          }
+        ],
+        "formatValue": {}
+      },
+      {
+        "variableId": "9",
+        "name": "JS - kpPageViewId",
+        "type": "j",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "kpPageViewId"
           }
         ],
         "formatValue": {}
