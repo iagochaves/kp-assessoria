@@ -1,5 +1,7 @@
 // Measures when tracking fires on a landing URL (median per network profile, Pixel 7 emulation).
-// Meta /tr and Clarity beacons are intercepted and aborted, so runs never reach production analytics.
+// Meta /tr, the Meta CAPI gateway (the pixel's optInMetaCAPI posts each event to *.on.aws or *.cloud.run /events,
+// which forwards it to Meta server side) and Clarity beacons are intercepted and aborted, so runs never reach
+// production analytics.
 // Usage: npm run measure -- [url] [runs]
 import { chromium, devices } from 'playwright';
 
@@ -30,12 +32,13 @@ for (const [pname, p] of Object.entries(PROFILES)) {
       const t = {};
       let t0;
       const mark = (k) => { if (t[k] == null) t[k] = Date.now() - t0; };
-      await page.route(/facebook\.com\/tr|clarity\.ms\/collect|\.clarity\.ms\/collect/, (route) => {
+      await page.route(/facebook\.com\/tr|clarity\.ms\/collect|\.on\.aws\/|\.cloud\.run\/events/, (route) => {
         const u = route.request().url();
         if (/facebook\.com\/tr/.test(u)) {
           const ev = new URL(u).searchParams.get('ev') || (route.request().postData() || '').match(/ev=([^&]+)/)?.[1];
           mark('fb_' + ev);
-        } else mark('clarity_collect');
+        } else if (/clarity\.ms/.test(u)) mark('clarity_collect');
+        else mark('capi_gateway');
         route.abort();
       });
       page.on('request', (rq) => {
